@@ -41,7 +41,7 @@ global_list :
     }
 
 function :
-    return_type identifier '(' ')' '{' block '}' {
+    type identifier '(' ')' '{' block '}' {
         auto node = make_node(NodeType::FUNCTION, {
             get_node($1),
             get_node($2),
@@ -50,7 +50,7 @@ function :
         $$ = store_node(node);
     };
 
-return_type :
+type :
     INT {
         auto node = make_node(NodeType::TYPE_INT, {}, "");
         $$ = store_node(node);
