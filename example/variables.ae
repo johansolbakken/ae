@@ -1,4 +1,3 @@
-
 int main() {
     int a = 15;
     println("Mitt magiske tall er");
