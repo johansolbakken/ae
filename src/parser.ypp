@@ -98,6 +98,12 @@ statement :
             get_node($1)
         }, "");
         $$ = store_node(node);
+    }
+    | assignment_statement ';' {
+         auto node = make_node(NodeType::STATEMENT, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
     };
 
 
@@ -127,6 +133,15 @@ declaration :
         }, "");
         $$ = store_node(node);
     };
+
+assignment_statement : 
+    identifier '=' expression {
+         auto node = make_node(NodeType::ASSIGNMENT_STATEMENT, {
+            get_node($1),
+            get_node($3)
+        }, "");
+        $$ = store_node(node);
+    }
 
 expression :
     expression '+' expression {

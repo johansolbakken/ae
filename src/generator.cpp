@@ -2,6 +2,24 @@
 
 #include <fstream>
 
+void generate_expression(std::ofstream &out, Node *node)
+{
+    if (node->children.size() == 1)
+    {
+        out << node->children[0]->value;
+    } 
+
+    else if (node->children.size() == 2)
+    {
+        generate_expression(out, node->children[0]);
+        out << " " << node->value << " ";
+        generate_expression(out, node->children[1]);
+    } else {
+        out << node->value;
+    }
+
+}
+
 void generate_statement_list(std::ofstream &out, Node *node)
 {
     for (auto statement : node->children)
@@ -20,8 +38,15 @@ void generate_statement_list(std::ofstream &out, Node *node)
                 type = "int";
             }
             auto identifier = statement->children[1]->value;
-            auto expression = statement->children[2]->value;
-            out << type << " " << identifier << " = " << expression << ";" << std::endl;
+            out << type << " " << identifier << " = "; 
+            generate_expression(out, statement->children[2]);
+            out << ";" << std::endl;
+        }
+        if (statement->type == NodeType::ASSIGNMENT_STATEMENT) {
+            auto identifier = statement->children[0]->value;
+            out << identifier << " = ";
+            generate_expression(out, statement->children[1]);
+            out << ";" << std::endl;
         }
     }
 }

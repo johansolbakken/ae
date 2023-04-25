@@ -16,5 +16,6 @@ enum class NodeType
     TYPE_INT,
     FUNCTION,
     DECLARATION,
-    EXPRESSION
+    EXPRESSION,
+    ASSIGNMENT_STATEMENT
 };

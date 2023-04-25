@@ -60,6 +60,8 @@ std::string node_type_to_string(NodeType type)
         return "DECLARATION";
     case NodeType::EXPRESSION:
         return "EXPRESSION";
+    case NodeType::ASSIGNMENT_STATEMENT:
+        return "ASSIGNMENT_STATEMENT";
     default:
         return "UNKNOWN";
     }
