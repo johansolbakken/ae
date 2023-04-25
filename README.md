@@ -37,7 +37,7 @@ int main() {
 Build program
 
 ```bash
-./aec < example/fib.ae
+./aec example/fib.ae
 ./fib
 ```
 
