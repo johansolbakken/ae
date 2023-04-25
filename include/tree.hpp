@@ -18,3 +18,5 @@ int store_node(Node* node);
 Node* get_node(int index);
 
 void print_node(Node* node, int indent = 0);
+
+Node* simplify_tree(Node* node);

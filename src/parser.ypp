@@ -33,13 +33,28 @@ program :
     };
 
 global_list : 
-    INT identifier '(' ')' '{' block '}' {
+    function {
         auto node = make_node(NodeType::GLOBAL_LIST, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
+    }
+
+function :
+    return_type identifier '(' ')' '{' block '}' {
+        auto node = make_node(NodeType::FUNCTION, {
+            get_node($1),
             get_node($2),
             get_node($6)
         }, "");
         $$ = store_node(node);
-    }
+    };
+
+return_type :
+    INT {
+        auto node = make_node(NodeType::TYPE_INT, {}, "");
+        $$ = store_node(node);
+    };
 
 block : 
     statement_list {

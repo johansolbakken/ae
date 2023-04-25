@@ -52,6 +52,10 @@ std::string node_type_to_string(NodeType type)
         return "INT_DATA";
     case NodeType::STRING_DATA:
         return "STRING_DATA";
+    case NodeType::TYPE_INT:
+        return "TYPE_INT";
+    case NodeType::FUNCTION:
+        return "FUNCTION";
     default:
         return "UNKNOWN";
     }
@@ -73,4 +77,34 @@ void print_node(Node *node, int indent)
     {
         print_node(child, indent + 1);
     }
+}
+
+Node* simplify_tree(Node *node)
+{
+    for (int i = 0; i < node->children.size(); i++) {
+        auto* child = node->children[i];
+        node->children[i] = simplify_tree(child);
+    }
+
+    if (node->type == NodeType::PROGRAM) {
+        auto* child = node->children[0];
+        delete node;
+        return child;
+    }
+
+    if (node->type == NodeType::STATEMENT) {
+        auto* child = node->children[0];
+        delete node;
+        return child;
+    }
+
+    if (node->type == NodeType::STATEMENT_LIST) {
+        if (node->children.size() == 1) {
+            auto* child = node->children[0];
+            delete node;
+            return child;
+        }
+    }
+
+    return node;
 }

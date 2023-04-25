@@ -13,4 +13,6 @@ enum class NodeType
     IDENTIFIER_DATA,
     INT_DATA,
     STRING_DATA,
+    TYPE_INT,
+    FUNCTION
 };
