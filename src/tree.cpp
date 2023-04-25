@@ -90,6 +90,44 @@ void print_node(Node *node, int indent)
     }
 }
 
+Node *flatten_globals(Node *node)
+{
+    for (int i = 0; i < node->children.size(); i++)
+    {
+        auto *child = node->children[i];
+        node->children[i] = flatten_globals(child);
+    }
+
+    if (node->type == NodeType::GLOBAL_LIST)
+    {
+        if (node->children.size() == 1)
+        {
+            auto *child = node->children[0];
+            delete node;
+            return child;
+        }
+        if (node->children[0]->type == NodeType::GLOBAL_LIST)
+        {
+            auto *child = node->children[0];
+            child->children.push_back(node->children[1]);
+            delete node;
+            return child;
+        }
+    }
+
+    if (node->type == NodeType::GLOBAL)
+    {
+        if (node->children.size() == 1)
+        {
+            auto *child = node->children[0];
+            delete node;
+            return child;
+        }
+    }
+
+    return node;
+}
+
 Node *simplify_tree(Node *node)
 {
     for (int i = 0; i < node->children.size(); i++)
@@ -175,37 +213,6 @@ Node *simplify_tree(Node *node)
                 delete node;
                 return child;
             }
-        }
-    }
-
-    if (node->type == NodeType::GLOBAL_LIST)
-    {
-        for (int i = 0; i < node->children.size(); i++)
-        {
-            auto *child = node->children[i];
-            if (child->children.size() == 1)
-            {
-                auto *child = node->children[0];
-                delete node;
-                return child;
-            }
-            if (child->children[0]->type == NodeType::GLOBAL_LIST)
-            {
-                auto *child = node->children[0];
-                child->children.push_back(node->children[1]);
-                delete node;
-                return child;
-            }
-        }
-    }
-
-    if (node->type == NodeType::GLOBAL)
-    {
-        if (node->children.size() == 1)
-        {
-            auto *child = node->children[0];
-            delete node;
-            return child;
         }
     }
 

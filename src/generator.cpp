@@ -55,7 +55,9 @@ void generate_statement(std::ofstream &out, Node *node)
 {
     if (node->type == NodeType::PRINT_STATEMENT)
     {
-        out << "std::cout << " << node->children[0]->value << " << std::endl;" << std::endl;
+        out << "std::cout << ";
+        generate_expression(out, node->children[0]);
+        out << " << std::endl;" << std::endl;
     }
     if (node->type == NodeType::RETURN_STATEMENT)
     {

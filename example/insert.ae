@@ -1,0 +1,6 @@
+#insert insertme
+
+int main() {
+    println(a());
+    return 0;
+}

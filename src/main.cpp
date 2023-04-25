@@ -4,6 +4,7 @@
 
 #include "tree.hpp"
 #include "generator.hpp"
+#include "preprocess.hpp"
 
 Node *root = nullptr;
 
@@ -14,6 +15,7 @@ struct Options
 {
     bool parse_tree = false;
     bool keep_cpp = false;
+    bool keep_out_ae = false;
     std::string output_file = "a.out";
 };
 
@@ -61,10 +63,13 @@ int main(int argc, char **argv)
             options.output_file = options.output_file.substr(0, last_dot);
     }
 
-    yyin = fopen(source_files[0].c_str(), "r");
+    preprocess(source_files[0], "out.ae");
+
+    yyin = fopen("out.ae", "r");
 
     // Parsing
     yyparse();
+    root = flatten_globals(root);
     root = simplify_tree(root);
     if (options.parse_tree)
         print_node(root);
@@ -74,6 +79,8 @@ int main(int argc, char **argv)
     compile_code("out.cpp", options.output_file);
     if (!options.keep_cpp)
         system("rm out.cpp");
+    if (!options.keep_out_ae)
+        system("rm out.ae");
 
     return 0;
 }

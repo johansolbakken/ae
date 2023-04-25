@@ -33,19 +33,20 @@ program :
     };
 
 global_list : 
-    global {
-        auto node = make_node(NodeType::GLOBAL_LIST, {
-            get_node($1)
-        }, "");
-        $$ = store_node(node);
-    };
-    | global_list global {
+ global_list global {
         auto node = make_node(NodeType::GLOBAL_LIST, {
             get_node($1),
             get_node($2)
         }, "");
         $$ = store_node(node);
     }
+    | global {
+        auto node = make_node(NodeType::GLOBAL_LIST, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
+    };
+    
     
 
 global : 
@@ -55,7 +56,6 @@ global :
         }, "");
         $$ = store_node(node);
     };
-
 
 function :
     type identifier '(' ')' '{' block '}' {
