@@ -129,7 +129,59 @@ declaration :
     };
 
 expression :
-    string_data {
+    expression '+' expression {
+        auto node = make_node(NodeType::EXPRESSION,
+        {
+            get_node($1),
+            get_node($3)
+        }, 
+        "+");
+        $$ = store_node(node);
+    }
+    | expression '-' expression {
+        auto node = make_node(NodeType::EXPRESSION,
+        {
+            get_node($1),
+            get_node($3)
+        }, 
+        "-");
+        $$ = store_node(node);
+    }
+    | expression '/' expression {
+        auto node = make_node(NodeType::EXPRESSION,
+        {
+            get_node($1),
+            get_node($3)
+        }, 
+        "/");
+        $$ = store_node(node);
+    }
+    | expression '*' expression {
+        auto node = make_node(NodeType::EXPRESSION,
+        {
+            get_node($1),
+            get_node($3)
+        }, 
+        "*");
+        $$ = store_node(node);
+    }
+    | '-' expression {
+         auto node = make_node(NodeType::EXPRESSION,
+        {
+            get_node($2)
+        }, 
+        "-");
+        $$ = store_node(node);
+    }
+    | '(' expression ')'{
+        auto node = make_node(NodeType::EXPRESSION,
+        {
+            get_node($2)
+        }, 
+        "");
+        $$ = store_node(node);
+    }
+    | string_data {
         auto node = make_node(NodeType::EXPRESSION, {
             get_node($1)
         }, "");

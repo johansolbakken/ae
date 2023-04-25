@@ -72,10 +72,7 @@ void print_node(Node *node, int indent)
         std::cout << "  ";
     }
     std::cout << node_type_to_string(node->type);
-    if (node->type == NodeType::INT_DATA || node->type == NodeType::STRING_DATA || node->type == NodeType::IDENTIFIER_DATA)
-    {
-        std::cout << " (" << node->value << ")";
-    }
+    std::cout << " (" << node->value << ")";
     std::cout << std::endl;
     for (Node *child : node->children)
     {
@@ -83,44 +80,91 @@ void print_node(Node *node, int indent)
     }
 }
 
-Node* simplify_tree(Node *node)
+Node *simplify_tree(Node *node)
 {
-    for (int i = 0; i < node->children.size(); i++) {
-        auto* child = node->children[i];
+    for (int i = 0; i < node->children.size(); i++)
+    {
+        auto *child = node->children[i];
         node->children[i] = simplify_tree(child);
     }
 
-    if (node->type == NodeType::PROGRAM) {
-        auto* child = node->children[0];
+    if (node->type == NodeType::PROGRAM)
+    {
+        auto *child = node->children[0];
         delete node;
         return child;
     }
 
-    if (node->type == NodeType::STATEMENT) {
-        auto* child = node->children[0];
+    if (node->type == NodeType::STATEMENT)
+    {
+        auto *child = node->children[0];
         delete node;
         return child;
     }
 
-    if (node->type == NodeType::STATEMENT_LIST) {
-        if (node->children.size() == 1) {
-            auto* child = node->children[0];
+    if (node->type == NodeType::STATEMENT_LIST)
+    {
+        if (node->children.size() == 1)
+        {
+            auto *child = node->children[0];
             delete node;
             return child;
         }
-        if (node->children[0]->type == NodeType::STATEMENT_LIST) {
-            auto* child = node->children[0];
+        if (node->children[0]->type == NodeType::STATEMENT_LIST)
+        {
+            auto *child = node->children[0];
             child->children.push_back(node->children[1]);
             delete node;
             return child;
         }
     }
 
-    if (node->type == NodeType::EXPRESSION) {
-        if (node->children.size() == 1) {
-            auto* child = node->children[0];
+    if (node->type == NodeType::EXPRESSION)
+    {
+        if (node->children.size() == 1)
+        {
+            auto *child = node->children[0];
             delete node;
             return child;
+        }
+
+        // Constant folding
+        if (node->children.size() == 2 &&
+            node->children[0]->type == NodeType::INT_DATA &&
+            node->children[1]->type == NodeType::INT_DATA)
+        {
+            if (node->value == "+")
+            {
+                auto *child = node->children[0];
+                child->value = std::to_string(std::stoi(child->value) + std::stoi(node->children[1]->value));
+                delete node->children[1];
+                delete node;
+                return child;
+            }
+            if (node->value == "-")
+            {
+                auto *child = node->children[0];
+                child->value = std::to_string(std::stoi(child->value) - std::stoi(node->children[1]->value));
+                delete node->children[1];
+                delete node;
+                return child;
+            }
+            if (node->value == "*")
+            {
+                auto *child = node->children[0];
+                child->value = std::to_string(std::stoi(child->value) * std::stoi(node->children[1]->value));
+                delete node->children[1];
+                delete node;
+                return child;
+            }
+            if (node->value == "/")
+            {
+                auto *child = node->children[0];
+                child->value = std::to_string(std::stoi(child->value) / std::stoi(node->children[1]->value));
+                delete node->children[1];
+                delete node;
+                return child;
+            }
         }
     }
 

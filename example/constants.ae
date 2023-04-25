@@ -1,0 +1,6 @@
+
+int main() {
+    int a = (5 + 5 * 5) / 2 - 5;
+    println(a);
+    return 0;
+}
