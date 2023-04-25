@@ -1,0 +1,15 @@
+
+int main() {
+    int i = 0;
+    int a = 0;
+    int b = 1;
+    println(a);
+    println(b);
+    while (i < 10) {
+        int c = a + b;
+        println(c);
+        a = b;
+        b = c;
+        i = i + 1;
+    }
+}
