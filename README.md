@@ -3,28 +3,42 @@
 </div>
 
 ## Hello World
-* Clone project
-* Need flex and bison
 
-__hello.ae__
-~~~c++
-int main() {
-    println("Hello, World!");
-    return 0;
-}
-~~~
+- Need flex and bison
 
 Make compiler
-~~~bash
+
+```bash
 clone the repo
 cd ae
 make
-~~~
+```
+
+example/fib.ae
+
+```c++
+
+int main() {
+    int i = 0;
+    int a = 0;
+    int b = 1;
+    println(a);
+    println(b);
+    while (i < 10) {
+        int c = a + b;
+        println(c);
+        a = b;
+        b = c;
+        i = i + 1;
+    }
+}
+```
 
 Build program
-~~~bash
-./aec < hello.ae
-./program
-~~~
+
+```bash
+./aec < example/fib.ae -o fib
+./fib
+```
 
 Ferdig da.
