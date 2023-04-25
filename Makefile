@@ -3,7 +3,7 @@ YACC=bison
 YFLAGS=
 CPPFLAGS=-std=c++20 -g -Iinclude -Isrc
 
-objects=src/parser.o src/scanner.o src/main.o src/tree.o
+objects=src/parser.o src/scanner.o src/main.o src/tree.o src/generator.o
 
 all: aec
 aec: $(objects) 

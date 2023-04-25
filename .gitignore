@@ -4,3 +4,4 @@ aec
 include/parser.hpp
 src/parser.cpp
 src/scanner.cpp
+program

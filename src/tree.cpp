@@ -104,6 +104,12 @@ Node* simplify_tree(Node *node)
             delete node;
             return child;
         }
+        if (node->children[0]->type == NodeType::STATEMENT_LIST) {
+            auto* child = node->children[0];
+            child->children.push_back(node->children[1]);
+            delete node;
+            return child;
+        }
     }
 
     return node;
