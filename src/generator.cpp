@@ -4,11 +4,15 @@
 
 void generate_expression(std::ofstream &out, Node *node)
 {
-    if (node->children.size() == 1)
+    if (node->type == NodeType::CALL_STATEMENT)
+    {
+        out << node->children[0]->value << "()";
+        return;
+    }
+    else if (node->children.size() == 1)
     {
         out << node->children[0]->value;
     }
-
     else if (node->children.size() == 2)
     {
         generate_expression(out, node->children[0]);

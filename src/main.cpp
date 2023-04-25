@@ -9,8 +9,8 @@ int yyparse();
 
 struct Options
 {
-    bool parse_tree = false;
-    bool keep_cpp = false;
+    bool parse_tree = true;
+    bool keep_cpp = true;
 };
 
 int main(int argc, char **argv)
