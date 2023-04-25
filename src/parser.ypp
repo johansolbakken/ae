@@ -8,7 +8,7 @@
     extern int yylineno;
 %}
 
-%token IDENTIFIER INT
+%token IDENTIFIER INT VOID
 %token INT_LITERAL STRING_LITERAL
 %token PRINTLN RETURN
 
@@ -33,12 +33,29 @@ program :
     };
 
 global_list : 
-    function {
+    global {
         auto node = make_node(NodeType::GLOBAL_LIST, {
             get_node($1)
         }, "");
         $$ = store_node(node);
+    };
+    | global_list global {
+        auto node = make_node(NodeType::GLOBAL_LIST, {
+            get_node($1),
+            get_node($2)
+        }, "");
+        $$ = store_node(node);
     }
+    
+
+global : 
+    function {
+        auto node = make_node(NodeType::GLOBAL, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
+    };
+
 
 function :
     type identifier '(' ')' '{' block '}' {
@@ -53,6 +70,10 @@ function :
 type :
     INT {
         auto node = make_node(NodeType::TYPE_INT, {}, "");
+        $$ = store_node(node);
+    }
+    | VOID {
+        auto node = make_node(NodeType::TYPE_VOID, {}, "");
         $$ = store_node(node);
     };
 
@@ -104,6 +125,12 @@ statement :
             get_node($1)
         }, "");
         $$ = store_node(node);
+    }
+    | call_statement ';' {
+        auto node = make_node(NodeType::STATEMENT, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
     };
 
 
@@ -141,7 +168,15 @@ assignment_statement :
             get_node($3)
         }, "");
         $$ = store_node(node);
-    }
+    };
+
+call_statement : 
+    identifier '(' ')' {
+        auto node = make_node(NodeType::CALL_STATEMENT, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
+    };
 
 expression :
     expression '+' expression {
@@ -194,6 +229,12 @@ expression :
             get_node($2)
         }, 
         "");
+        $$ = store_node(node);
+    }
+    | call_statement {
+        auto node = make_node(NodeType::EXPRESSION, {
+            get_node($1)
+        }, "");
         $$ = store_node(node);
     }
     | string_data {

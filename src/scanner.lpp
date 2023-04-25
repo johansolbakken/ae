@@ -23,6 +23,7 @@ COMMENT \/\/[^\n]+
 int                     { return INT; }
 println                 { return PRINTLN; }
 return                  { return RETURN; }
+void                    { return VOID; }
 
 {INT_VALUE}             { return INT_LITERAL; }
 {IDENTIFIER}            { return IDENTIFIER; }

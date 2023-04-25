@@ -31,7 +31,6 @@ int main(int argc, char **argv)
     // Parsing
     yyparse();
     root = simplify_tree(root);
-
     if (options.parse_tree)
         print_node(root);
 

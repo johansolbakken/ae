@@ -62,6 +62,10 @@ std::string node_type_to_string(NodeType type)
         return "EXPRESSION";
     case NodeType::ASSIGNMENT_STATEMENT:
         return "ASSIGNMENT_STATEMENT";
+    case NodeType::TYPE_VOID:
+        return "TYPE_VOID";
+    case NodeType::CALL_STATEMENT:
+        return "CALL_STATEMENT";
     default:
         return "UNKNOWN";
     }
@@ -167,6 +171,33 @@ Node *simplify_tree(Node *node)
                 delete node;
                 return child;
             }
+        }
+    }
+
+    if (node->type == NodeType::GLOBAL_LIST)
+    {
+        if (node->children.size() == 1)
+        {
+            auto *child = node->children[0];
+            delete node;
+            return child;
+        }
+        if (node->children[0]->type == NodeType::GLOBAL_LIST)
+        {
+            auto *child = node->children[0];
+            child->children.push_back(node->children[1]);
+            delete node;
+            return child;
+        }
+    }
+
+    if (node->type == NodeType::GLOBAL)
+    {
+        if (node->children.size() == 1)
+        {
+            auto *child = node->children[0];
+            delete node;
+            return child;
         }
     }
 

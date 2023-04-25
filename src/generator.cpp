@@ -7,47 +7,66 @@ void generate_expression(std::ofstream &out, Node *node)
     if (node->children.size() == 1)
     {
         out << node->children[0]->value;
-    } 
+    }
 
     else if (node->children.size() == 2)
     {
         generate_expression(out, node->children[0]);
         out << " " << node->value << " ";
         generate_expression(out, node->children[1]);
-    } else {
+    }
+    else
+    {
         out << node->value;
     }
+}
 
+void generate_statement(std::ofstream &out, Node *node)
+{
+    if (node->type == NodeType::PRINT_STATEMENT)
+    {
+        out << "std::cout << " << node->children[0]->value << " << std::endl;" << std::endl;
+    }
+    if (node->type == NodeType::RETURN_STATEMENT)
+    {
+        out << "return " << node->children[0]->value << ";" << std::endl;
+    }
+    if (node->type == NodeType::DECLARATION)
+    {
+        auto type = "";
+        if (node->children[0]->type == NodeType::TYPE_INT)
+        {
+            type = "int";
+        }
+        auto identifier = node->children[1]->value;
+        out << type << " " << identifier << " = ";
+        generate_expression(out, node->children[2]);
+        out << ";" << std::endl;
+    }
+    if (node->type == NodeType::ASSIGNMENT_STATEMENT)
+    {
+        auto identifier = node->children[0]->value;
+        out << identifier << " = ";
+        generate_expression(out, node->children[1]);
+        out << ";" << std::endl;
+    }
+    if (node->type == NodeType::CALL_STATEMENT)
+    {
+        auto identifier = node->children[0]->value;
+        out << identifier << "();" << std::endl;
+    }
 }
 
 void generate_statement_list(std::ofstream &out, Node *node)
 {
+    if (node->type != NodeType::STATEMENT_LIST)
+    {
+        generate_statement(out, node);
+        return;
+    }
     for (auto statement : node->children)
     {
-        if (statement->type == NodeType::PRINT_STATEMENT)
-        {
-            out << "std::cout << " << statement->children[0]->value << " << std::endl;" << std::endl;
-        }
-        if (statement->type == NodeType::RETURN_STATEMENT)
-        {
-            out << "return " << statement->children[0]->value << ";" << std::endl;
-        }
-        if (statement->type == NodeType::DECLARATION) {
-            auto type = "";
-            if (statement->children[0]->type == NodeType::TYPE_INT) {
-                type = "int";
-            }
-            auto identifier = statement->children[1]->value;
-            out << type << " " << identifier << " = "; 
-            generate_expression(out, statement->children[2]);
-            out << ";" << std::endl;
-        }
-        if (statement->type == NodeType::ASSIGNMENT_STATEMENT) {
-            auto identifier = statement->children[0]->value;
-            out << identifier << " = ";
-            generate_expression(out, statement->children[1]);
-            out << ";" << std::endl;
-        }
+        generate_statement(out, statement);
     }
 }
 
@@ -64,6 +83,10 @@ void generate_function(std::ofstream &out, Node *node)
     if (node->children[0]->type == NodeType::TYPE_INT)
     {
         type = "int";
+    }
+    else if (node->children[0]->type == NodeType::TYPE_VOID)
+    {
+        type = "void";
     }
 
     auto func_name = node->children[1]->value;
