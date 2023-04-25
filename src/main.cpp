@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <fstream>
 
 #include "tree.hpp"
 #include "generator.hpp"
@@ -6,6 +8,7 @@
 Node *root = nullptr;
 
 int yyparse();
+extern FILE *yyin;
 
 struct Options
 {
@@ -16,8 +19,10 @@ struct Options
 
 int main(int argc, char **argv)
 {
+    std::vector<std::string> source_files;
+
     Options options;
-    for (int i = 0; i < argc; i++)
+    for (int i = 1; i < argc; i++)
     {
         if (std::string(argv[i]) == "--parse-tree")
         {
@@ -32,7 +37,31 @@ int main(int argc, char **argv)
             options.output_file = argv[i + 1];
             i++;
         }
+        else
+        {
+            source_files.push_back(argv[i]);
+        }
     }
+
+    if (source_files.size() == 0)
+    {
+        std::cout << "No source files provided" << std::endl;
+        return 1;
+    }
+
+    if (options.output_file == "a.out")
+    {
+        // set output file to source file name without extension and without path
+        options.output_file = source_files[0];
+        int last_slash = options.output_file.find_last_of('/');
+        if (last_slash != std::string::npos)
+            options.output_file = options.output_file.substr(last_slash + 1);
+        int last_dot = options.output_file.find_last_of('.');
+        if (last_dot != std::string::npos)
+            options.output_file = options.output_file.substr(0, last_dot);
+    }
+
+    yyin = fopen(source_files[0].c_str(), "r");
 
     // Parsing
     yyparse();
