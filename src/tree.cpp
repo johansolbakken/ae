@@ -66,6 +66,10 @@ std::string node_type_to_string(NodeType type)
         return "TYPE_VOID";
     case NodeType::CALL_STATEMENT:
         return "CALL_STATEMENT";
+    case NodeType::IF_STATEMENT:
+        return "IF_STATEMENT";
+    case NodeType::CONDITION:
+        return "CONDITION";
     default:
         return "UNKNOWN";
     }
@@ -176,18 +180,22 @@ Node *simplify_tree(Node *node)
 
     if (node->type == NodeType::GLOBAL_LIST)
     {
-        if (node->children.size() == 1)
+        for (int i = 0; i < node->children.size(); i++)
         {
-            auto *child = node->children[0];
-            delete node;
-            return child;
-        }
-        if (node->children[0]->type == NodeType::GLOBAL_LIST)
-        {
-            auto *child = node->children[0];
-            child->children.push_back(node->children[1]);
-            delete node;
-            return child;
+            auto *child = node->children[i];
+            if (child->children.size() == 1)
+            {
+                auto *child = node->children[0];
+                delete node;
+                return child;
+            }
+            if (child->children[0]->type == NodeType::GLOBAL_LIST)
+            {
+                auto *child = node->children[0];
+                child->children.push_back(node->children[1]);
+                delete node;
+                return child;
+            }
         }
     }
 

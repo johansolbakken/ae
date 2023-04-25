@@ -24,6 +24,8 @@ int                     { return INT; }
 println                 { return PRINTLN; }
 return                  { return RETURN; }
 void                    { return VOID; }
+if                      { return IF; }
+else                    { return ELSE; }
 
 {INT_VALUE}             { return INT_LITERAL; }
 {IDENTIFIER}            { return IDENTIFIER; }

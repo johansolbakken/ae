@@ -2,6 +2,20 @@
 
 #include <fstream>
 
+void generate_expression(std::ofstream &out, Node *node);
+void generate_condition(std::ofstream &out, Node *node)
+{
+    if (node->children.size() == 1)
+    {
+        out << node->children[0]->value;
+        return;
+    }
+
+    generate_expression(out, node->children[0]);
+    out << " " << node->value << " ";
+    generate_expression(out, node->children[1]);
+}
+
 void generate_expression(std::ofstream &out, Node *node)
 {
     if (node->type == NodeType::CALL_STATEMENT)
@@ -25,6 +39,7 @@ void generate_expression(std::ofstream &out, Node *node)
     }
 }
 
+void generate_statement_list(std::ofstream &out, Node *node);
 void generate_statement(std::ofstream &out, Node *node)
 {
     if (node->type == NodeType::PRINT_STATEMENT)
@@ -58,6 +73,27 @@ void generate_statement(std::ofstream &out, Node *node)
     {
         auto identifier = node->children[0]->value;
         out << identifier << "();" << std::endl;
+    }
+    if (node->type == NodeType::IF_STATEMENT)
+    {
+        if (node->children.size() == 2)
+        {
+            out << "if (";
+            generate_condition(out, node->children[0]);
+            out << ") {" << std::endl;
+            generate_statement_list(out, node->children[1]);
+            out << "}" << std::endl;
+        }
+        else
+        {
+            out << "if (";
+            generate_condition(out, node->children[0]);
+            out << "){" << std::endl;
+            generate_statement_list(out, node->children[1]);
+            out << "}else{" << std::endl;
+            generate_statement_list(out, node->children[2]);
+            out << "}" << std::endl;
+        }
     }
 }
 
