@@ -2,7 +2,19 @@
 
 #include <fstream>
 
+void generate_condition(std::ofstream &out, Node *node);
 void generate_expression(std::ofstream &out, Node *node);
+void generate_statement_list(std::ofstream &out, Node *node);
+void generate_statement(std::ofstream &out, Node *node);
+void generate_while(std::ofstream &out, Node *node)
+{
+    out << "while (";
+    generate_condition(out, node->children[0]);
+    out << ") {" << std::endl;
+    generate_statement_list(out, node->children[1]);
+    out << "}" << std::endl;
+}
+
 void generate_condition(std::ofstream &out, Node *node)
 {
     if (node->children.size() == 1)
@@ -39,7 +51,6 @@ void generate_expression(std::ofstream &out, Node *node)
     }
 }
 
-void generate_statement_list(std::ofstream &out, Node *node);
 void generate_statement(std::ofstream &out, Node *node)
 {
     if (node->type == NodeType::PRINT_STATEMENT)
@@ -94,6 +105,10 @@ void generate_statement(std::ofstream &out, Node *node)
             generate_statement_list(out, node->children[2]);
             out << "}" << std::endl;
         }
+    }
+    if (node->type == NodeType::WHILE_STATEMENT)
+    {
+        generate_while(out, node);
     }
 }
 

@@ -8,7 +8,7 @@
     extern int yylineno;
 %}
 
-%token IDENTIFIER INT VOID IF ELSE
+%token IDENTIFIER INT VOID IF ELSE WHILE
 %token INT_LITERAL STRING_LITERAL
 %token PRINTLN RETURN
 
@@ -137,6 +137,12 @@ statement :
             get_node($1)
         }, "");
         $$ = store_node(node);
+    } 
+    | while_statement {
+        auto node = make_node(NodeType::STATEMENT, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
     };
 
 
@@ -200,6 +206,15 @@ if_statement :
         }, "");
         $$ = store_node(node);
     };
+
+while_statement:
+    WHILE '(' condition ')' '{' statement_list '}' {
+         auto node = make_node(NodeType::WHILE_STATEMENT, {
+            get_node($3),
+            get_node($6)
+        }, "");
+        $$ = store_node(node);
+    }
 
 condition : 
     expression '<' expression {
