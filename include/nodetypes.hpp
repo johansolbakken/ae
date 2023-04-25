@@ -14,5 +14,7 @@ enum class NodeType
     INT_DATA,
     STRING_DATA,
     TYPE_INT,
-    FUNCTION
+    FUNCTION,
+    DECLARATION,
+    EXPRESSION
 };

@@ -56,6 +56,10 @@ std::string node_type_to_string(NodeType type)
         return "TYPE_INT";
     case NodeType::FUNCTION:
         return "FUNCTION";
+    case NodeType::DECLARATION:
+        return "DECLARATION";
+    case NodeType::EXPRESSION:
+        return "EXPRESSION";
     default:
         return "UNKNOWN";
     }
@@ -107,6 +111,14 @@ Node* simplify_tree(Node *node)
         if (node->children[0]->type == NodeType::STATEMENT_LIST) {
             auto* child = node->children[0];
             child->children.push_back(node->children[1]);
+            delete node;
+            return child;
+        }
+    }
+
+    if (node->type == NodeType::EXPRESSION) {
+        if (node->children.size() == 1) {
+            auto* child = node->children[0];
             delete node;
             return child;
         }

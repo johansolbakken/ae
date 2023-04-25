@@ -92,11 +92,17 @@ statement :
             get_node($1)
         }, "");
         $$ = store_node(node);
+    }
+    | declaration ';' {
+        auto node = make_node(NodeType::STATEMENT, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
     };
 
 
 print_statement : 
-    PRINTLN '(' string_data ')' {
+    PRINTLN '(' expression ')' {
         auto node = make_node(NodeType::PRINT_STATEMENT, {
             get_node($3)
         }, "");
@@ -112,6 +118,35 @@ return_statement :
         $$ = store_node(node);
     };
 
+declaration : 
+    type identifier '=' expression {
+        auto node = make_node(NodeType::DECLARATION, {
+            get_node($1),
+            get_node($2),
+            get_node($4)
+        }, "");
+        $$ = store_node(node);
+    };
+
+expression :
+    string_data {
+        auto node = make_node(NodeType::EXPRESSION, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
+    }
+    | int_data {
+        auto node = make_node(NodeType::EXPRESSION, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
+    } 
+    | identifier {
+        auto node = make_node(NodeType::EXPRESSION, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
+    }
 
 string_data : 
     STRING_LITERAL {
