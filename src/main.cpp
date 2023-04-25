@@ -9,8 +9,9 @@ int yyparse();
 
 struct Options
 {
-    bool parse_tree = true;
-    bool keep_cpp = true;
+    bool parse_tree = false;
+    bool keep_cpp = false;
+    std::string output_file = "a.out";
 };
 
 int main(int argc, char **argv)
@@ -26,6 +27,11 @@ int main(int argc, char **argv)
         {
             options.keep_cpp = true;
         }
+        else if (std::string(argv[i]) == "--output" || std::string(argv[i]) == "-o")
+        {
+            options.output_file = argv[i + 1];
+            i++;
+        }
     }
 
     // Parsing
@@ -36,7 +42,7 @@ int main(int argc, char **argv)
 
     // Generate code
     generate_code(root, "out.cpp");
-    compile_code("out.cpp", "program");
+    compile_code("out.cpp", options.output_file);
     if (!options.keep_cpp)
         system("rm out.cpp");
 
