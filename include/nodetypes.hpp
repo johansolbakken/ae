@@ -1,0 +1,16 @@
+#pragma once
+
+enum class NodeType
+{
+    PROGRAM,
+    GLOBAL_LIST,
+    GLOBAL,
+    STATEMENT,
+    BLOCK,
+    STATEMENT_LIST,
+    RETURN_STATEMENT,
+    PRINT_STATEMENT,
+    IDENTIFIER_DATA,
+    INT_DATA,
+    STRING_DATA,
+};

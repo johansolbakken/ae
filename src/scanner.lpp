@@ -1,0 +1,32 @@
+%{
+    #include <iostream>
+    #include "parser.hpp"
+%}
+
+%option noyywrap
+%option array
+%option yylineno
+
+WHITESPACE [\ \t\v\r\n]
+INT_VALUE -?[0-9]+
+FLOAT_NUMBER -?[0-9]+.[0-9]+
+IDENTIFIER ([a-zA-Z]|_)([a-zA-Z0-9]|\_)*
+QUOTED \"([^\"\n]|\\\")*\"
+COMMENT \/\/[^\n]+
+
+%%
+
+{WHITESPACE}+           { }
+{COMMENT}               { }
+{QUOTED}                { return STRING_LITERAL; }
+
+int                     { return INT; }
+println                 { return PRINTLN; }
+return                  { return RETURN; }
+
+{INT_VALUE}             { return INT_LITERAL; }
+{IDENTIFIER}            { return IDENTIFIER; }
+
+.                       { return yytext[0]; }
+
+%%

@@ -1,0 +1,126 @@
+%{
+    #include <iostream>
+    #include "tree.hpp"
+    extern Node* root;
+    extern char yytext[];
+    extern int yylex();
+    extern int yyerror(const char *error);
+    extern int yylineno;
+%}
+
+%token IDENTIFIER INT
+%token INT_LITERAL STRING_LITERAL
+%token PRINTLN RETURN
+
+%left '|' '&' '^'
+%left '+' '-'
+%left '*' '/'
+%nonassoc UMINUS
+%right '~'
+//%expect 1
+
+%nonassoc IF THEN
+%nonassoc ELSE
+
+%%
+
+program : 
+    global_list {
+        auto node = make_node(NodeType::PROGRAM, {
+            get_node($1)
+        }, "");
+        root = node;
+    };
+
+global_list : 
+    INT identifier '(' ')' '{' block '}' {
+        auto node = make_node(NodeType::GLOBAL_LIST, {
+            get_node($2),
+            get_node($6)
+        }, "");
+        $$ = store_node(node);
+    }
+
+block : 
+    statement_list {
+        auto node = make_node(NodeType::BLOCK, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
+    };
+
+statement_list : 
+    statement_list statement {
+        auto node = make_node(NodeType::STATEMENT_LIST, {
+            get_node($1),
+            get_node($2)
+        }, "");
+        $$ = store_node(node);
+    }
+    | statement {
+        auto node = make_node(NodeType::STATEMENT_LIST, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
+    };
+
+
+statement : 
+    print_statement ';' {
+        auto node = make_node(NodeType::STATEMENT, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
+    }
+    | return_statement ';' {
+        auto node = make_node(NodeType::STATEMENT, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
+    };
+
+
+print_statement : 
+    PRINTLN '(' string_data ')' {
+        auto node = make_node(NodeType::PRINT_STATEMENT, {
+            get_node($3)
+        }, "");
+        $$ = store_node(node);
+    };
+
+
+return_statement : 
+    RETURN int_data {
+        auto node = make_node(NodeType::RETURN_STATEMENT, {
+            get_node($2)
+        }, "");
+        $$ = store_node(node);
+    };
+
+
+string_data : 
+    STRING_LITERAL {
+        auto node = make_node(NodeType::STRING_DATA, {}, std::string(yytext));
+        $$ = store_node(node);
+    };
+
+
+int_data : 
+    INT_LITERAL {
+        auto node = make_node(NodeType::INT_DATA, {}, std::string(yytext));
+        $$ = store_node(node);
+    };
+
+identifier :
+    IDENTIFIER {
+        auto node = make_node(NodeType::IDENTIFIER_DATA, {}, std::string(yytext));
+        $$ = store_node(node);
+    }
+
+
+%%
+
+int yyerror(const char* error) {
+    std::cout << error << " on line " << yylineno << std::endl;
+    exit(EXIT_FAILURE);
+}

@@ -1,0 +1,6 @@
+aec
+*/*.o
+.vscode
+include/parser.hpp
+src/parser.cpp
+src/scanner.cpp
