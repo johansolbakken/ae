@@ -28,6 +28,7 @@ float                   { return FLOAT; }
 if                      { return IF; }
 else                    { return ELSE; }
 while                   { return WHILE; }
+print                   { return PRINT; }
 
 {INT_VALUE}             { return INT_LITERAL; }
 {FLOAT_NUMBER}          { return FLOAT_LITERAL; }

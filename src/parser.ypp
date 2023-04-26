@@ -10,7 +10,7 @@
 
 %token IDENTIFIER INT VOID IF ELSE WHILE FLOAT
 %token INT_LITERAL STRING_LITERAL FLOAT_LITERAL
-%token PRINTLN RETURN
+%token PRINTLN RETURN PRINT
 
 %left '|' '&' '^'
 %left '+' '-'
@@ -151,10 +151,16 @@ statement :
 
 
 print_statement : 
-    PRINTLN '(' expression ')' {
+    PRINT '(' expression ')' {
         auto node = make_node(NodeType::PRINT_STATEMENT, {
             get_node($3)
         }, "");
+        $$ = store_node(node);
+    }
+    | PRINTLN '(' expression ')' {
+        auto node = make_node(NodeType::PRINT_STATEMENT, {
+            get_node($3)
+        }, "\n");
         $$ = store_node(node);
     };
 
