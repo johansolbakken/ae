@@ -8,8 +8,8 @@
     extern int yylineno;
 %}
 
-%token IDENTIFIER INT VOID IF ELSE WHILE
-%token INT_LITERAL STRING_LITERAL
+%token IDENTIFIER INT VOID IF ELSE WHILE FLOAT
+%token INT_LITERAL STRING_LITERAL FLOAT_LITERAL
 %token PRINTLN RETURN
 
 %left '|' '&' '^'
@@ -74,6 +74,10 @@ type :
     }
     | VOID {
         auto node = make_node(NodeType::TYPE_VOID, {}, "");
+        $$ = store_node(node);
+    }
+    | FLOAT {
+        auto node = make_node(NodeType::TYPE_FLOAT, {}, "");
         $$ = store_node(node);
     };
 
@@ -317,6 +321,12 @@ expression :
         }, "");
         $$ = store_node(node);
     } 
+    | float_data {
+        auto node = make_node(NodeType::EXPRESSION, {
+            get_node($1)
+        }, "");
+        $$ = store_node(node);
+    }
     | identifier {
         auto node = make_node(NodeType::EXPRESSION, {
             get_node($1)
@@ -334,6 +344,12 @@ string_data :
 int_data : 
     INT_LITERAL {
         auto node = make_node(NodeType::INT_DATA, {}, std::string(yytext));
+        $$ = store_node(node);
+    };
+
+float_data :
+    FLOAT_LITERAL {
+        auto node = make_node(NodeType::FLOAT_DATA, {}, std::string(yytext));
         $$ = store_node(node);
     };
 

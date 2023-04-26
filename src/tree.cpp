@@ -70,6 +70,12 @@ std::string node_type_to_string(NodeType type)
         return "IF_STATEMENT";
     case NodeType::CONDITION:
         return "CONDITION";
+    case NodeType::WHILE_STATEMENT:
+        return "WHILE_STATEMENT";
+    case NodeType::TYPE_FLOAT:
+        return "TYPE_FLOAT";
+    case NodeType::FLOAT_DATA:
+        return "FLOAT_DATA";
     default:
         return "UNKNOWN";
     }

@@ -24,11 +24,13 @@ int                     { return INT; }
 println                 { return PRINTLN; }
 return                  { return RETURN; }
 void                    { return VOID; }
+float                   { return FLOAT; }
 if                      { return IF; }
 else                    { return ELSE; }
 while                   { return WHILE; }
 
 {INT_VALUE}             { return INT_LITERAL; }
+{FLOAT_NUMBER}          { return FLOAT_LITERAL; }
 {IDENTIFIER}            { return IDENTIFIER; }
 
 .                       { return yytext[0]; }

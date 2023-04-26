@@ -70,6 +70,14 @@ void generate_statement(std::ofstream &out, Node *node)
         {
             type = "int";
         }
+        else if (node->children[0]->type == NodeType::TYPE_FLOAT)
+        {
+            type = "float";
+        }
+        else if (node->children[0]->type == NodeType::TYPE_VOID)
+        {
+            type = "void";
+        }
         auto identifier = node->children[1]->value;
         out << type << " " << identifier << " = ";
         generate_expression(out, node->children[2]);
@@ -144,6 +152,10 @@ void generate_function(std::ofstream &out, Node *node)
     else if (node->children[0]->type == NodeType::TYPE_VOID)
     {
         type = "void";
+    }
+    else if (node->children[0]->type == NodeType::TYPE_FLOAT)
+    {
+        type = "float";
     }
 
     auto func_name = node->children[1]->value;
