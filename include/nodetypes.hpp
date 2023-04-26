@@ -26,4 +26,5 @@ enum class NodeType
     CONDITION,
     WHILE_STATEMENT,
     INSERT_STATEMENT,
+    POINTER
 };

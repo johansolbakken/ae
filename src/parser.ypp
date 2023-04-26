@@ -46,8 +46,6 @@ global_list :
         }, "");
         $$ = store_node(node);
     };
-    
-    
 
 global : 
     function {
@@ -78,6 +76,12 @@ type :
     }
     | FLOAT {
         auto node = make_node(NodeType::TYPE_FLOAT, {}, "");
+        $$ = store_node(node);
+    }
+    | type '*' {
+        auto node = make_node(NodeType::POINTER, {
+            get_node($1)
+        }, "");
         $$ = store_node(node);
     };
 

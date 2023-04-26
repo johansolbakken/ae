@@ -2,6 +2,27 @@
 
 #include <fstream>
 
+void generate_type(std::ofstream &out, Node *node)
+{
+    if (node->type == NodeType::TYPE_INT)
+    {
+        out << "int";
+    }
+    else if (node->type == NodeType::TYPE_FLOAT)
+    {
+        out << "float";
+    }
+    else if (node->type == NodeType::TYPE_VOID)
+    {
+        out << "void";
+    }
+    else if (node->type == NodeType::POINTER)
+    {
+        generate_type(out, node->children[0]);
+        out << "*";
+    }
+}
+
 void generate_condition(std::ofstream &out, Node *node);
 void generate_expression(std::ofstream &out, Node *node);
 void generate_statement_list(std::ofstream &out, Node *node);
@@ -72,21 +93,9 @@ void generate_statement(std::ofstream &out, Node *node)
     }
     if (node->type == NodeType::DECLARATION)
     {
-        auto type = "";
-        if (node->children[0]->type == NodeType::TYPE_INT)
-        {
-            type = "int";
-        }
-        else if (node->children[0]->type == NodeType::TYPE_FLOAT)
-        {
-            type = "float";
-        }
-        else if (node->children[0]->type == NodeType::TYPE_VOID)
-        {
-            type = "void";
-        }
+        generate_type(out, node->children[0]);
         auto identifier = node->children[1]->value;
-        out << type << " " << identifier << " = ";
+        out << " " << identifier << " = ";
         generate_expression(out, node->children[2]);
         out << ";" << std::endl;
     }
@@ -151,23 +160,11 @@ void generate_block(std::ofstream &out, Node *node)
 
 void generate_function(std::ofstream &out, Node *node)
 {
-    auto type = "";
-    if (node->children[0]->type == NodeType::TYPE_INT)
-    {
-        type = "int";
-    }
-    else if (node->children[0]->type == NodeType::TYPE_VOID)
-    {
-        type = "void";
-    }
-    else if (node->children[0]->type == NodeType::TYPE_FLOAT)
-    {
-        type = "float";
-    }
+    generate_type(out, node->children[0]);
 
     auto func_name = node->children[1]->value;
 
-    out << type << " " << func_name << "()" << std::endl;
+    out << " " << func_name << "()" << std::endl;
     auto block = node->children[2];
     generate_block(out, block);
 }
