@@ -1,5 +1,7 @@
 
 int main() {
-    int* a = 500;
+    int stack = 0;
+    int* sp = &stack;
+    println(*sp);
     return 0;
 }

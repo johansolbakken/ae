@@ -76,6 +76,8 @@ std::string node_type_to_string(NodeType type)
         return "TYPE_FLOAT";
     case NodeType::FLOAT_DATA:
         return "FLOAT_DATA";
+    case NodeType::POINTER:
+        return "POINTER";
     default:
         return "UNKNOWN";
     }
@@ -175,13 +177,6 @@ Node *simplify_tree(Node *node)
 
     if (node->type == NodeType::EXPRESSION)
     {
-        if (node->children.size() == 1)
-        {
-            auto *child = node->children[0];
-            delete node;
-            return child;
-        }
-
         // Constant folding
         if (node->children.size() == 2 &&
             node->children[0]->type == NodeType::INT_DATA &&

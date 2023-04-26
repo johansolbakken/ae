@@ -13,8 +13,8 @@ extern FILE *yyin;
 
 struct Options
 {
-    bool parse_tree = false;
-    bool keep_cpp = false;
+    bool parse_tree = true;
+    bool keep_cpp = true;
     bool keep_out_ae = false;
     std::string output_file = "a.out";
 };

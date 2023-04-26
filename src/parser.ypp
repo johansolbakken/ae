@@ -305,6 +305,22 @@ expression :
         "-");
         $$ = store_node(node);
     }
+    | '*' expression {
+    auto node = make_node(NodeType::EXPRESSION,
+        {
+            get_node($2)
+        }, 
+        "*");
+        $$ = store_node(node);
+    }
+    | '&' expression {
+        auto node = make_node(NodeType::EXPRESSION,
+        {
+            get_node($2)
+        }, 
+        "&");
+        $$ = store_node(node);
+    }
     | '(' expression ')'{
         auto node = make_node(NodeType::EXPRESSION,
         {

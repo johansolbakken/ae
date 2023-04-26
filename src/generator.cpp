@@ -58,7 +58,20 @@ void generate_expression(std::ofstream &out, Node *node)
     }
     else if (node->children.size() == 1)
     {
-        out << node->children[0]->value;
+        if (node->value == "*")
+        {
+            out << "*";
+        }
+        else if (node->value == "&")
+        {
+            out << "&";
+        }
+        else if (node->value == "-")
+        {
+            out << "-";
+        }
+
+        generate_expression(out, node->children[0]);
     }
     else if (node->children.size() == 2)
     {
