@@ -153,19 +153,26 @@ void generate_function(std::ofstream &out, Node *node)
     generate_block(out, block);
 }
 
+void generate_program(std::ofstream &out, Node *node)
+{
+    for (auto child : node->children)
+    {
+        generate_program(out, child);
+    }
+
+    if (node->type == NodeType::FUNCTION)
+    {
+        generate_function(out, node);
+    }
+}
+
 void generate_code(Node *node, const std::string &filename)
 {
     std::ofstream out(filename);
 
     out << "#include <iostream>" << std::endl;
 
-    for (auto child : node->children)
-    {
-        if (child->type == NodeType::FUNCTION)
-        {
-            generate_function(out, child);
-        }
-    }
+    generate_program(out, node);
 }
 
 void compile_code(const std::string &ir, const std::string &filename)
