@@ -166,7 +166,7 @@ print_statement :
 
 
 return_statement : 
-    RETURN int_data {
+    RETURN expression {
         auto node = make_node(NodeType::RETURN_STATEMENT, {
             get_node($2)
         }, "");
