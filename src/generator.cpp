@@ -114,8 +114,20 @@ void generate_statement(std::ofstream &out, Node *node)
     }
     if (node->type == NodeType::ASSIGNMENT_STATEMENT)
     {
-        auto identifier = node->children[0]->value;
-        out << identifier << " = ";
+        if (node->value == "*")
+        {
+            // Pointer set
+            out << "*";
+            generate_expression(out, node->children[0]);
+        }
+        else
+        {
+            // Normal set
+            auto identifier = node->children[0]->value;
+            out << identifier;
+        }
+
+        out << " = ";
         generate_expression(out, node->children[1]);
         out << ";" << std::endl;
     }

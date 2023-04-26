@@ -90,7 +90,8 @@ void print_node(Node *node, int indent)
         std::cout << "  ";
     }
     std::cout << node_type_to_string(node->type);
-    std::cout << " (" << node->value << ")";
+    if (node->value != "")
+        std::cout << " (" << node->value << ")";
     std::cout << std::endl;
     for (Node *child : node->children)
     {

@@ -3,5 +3,7 @@ int main() {
     int stack = 0;
     int* sp = &stack;
     println(*sp);
+    *sp = 5;
+    println(*sp);
     return 0;
 }
