@@ -42,3 +42,13 @@ Build program
 ```
 
 Ferdig da.
+
+## What Æ lang supports
+
+- Print statements: `println(x)`,`print(x)`
+- Int declaration: `int a = 5;`
+- Float declaration: `float b = 5.0;`
+- If, If/else: `if` `else`
+- While statement: `while`
+- void function: `void a() { println("Hello"); }`
+- int/float function: `int g() { return 0; }`
