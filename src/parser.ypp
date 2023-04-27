@@ -58,6 +58,13 @@ global :
         }, "");
         node->line = yylineno;
         $$ = store_node(node);
+    }
+    | declaration ';' {
+        auto node = make_node(NodeType::GLOBAL, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
     };
 
 function :

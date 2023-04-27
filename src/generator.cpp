@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-std::string node_type_to_cpp(Node* node)
+std::string node_type_to_cpp(Node *node)
 {
     switch (node->type)
     {
@@ -115,6 +115,15 @@ void generate_expression(std::ofstream &out, Node *node)
     }
 }
 
+void generate_declaration(std::ofstream &out, Node *node)
+{
+    generate_type(out, node->children[0]);
+    auto identifier = node->children[1]->value;
+    out << " " << identifier << " = ";
+    generate_expression(out, node->children[2]);
+    out << ";" << std::endl;
+}
+
 void generate_statement(std::ofstream &out, Node *node)
 {
     if (node->type == NodeType::PRINT_STATEMENT)
@@ -136,11 +145,7 @@ void generate_statement(std::ofstream &out, Node *node)
     }
     if (node->type == NodeType::DECLARATION)
     {
-        generate_type(out, node->children[0]);
-        auto identifier = node->children[1]->value;
-        out << " " << identifier << " = ";
-        generate_expression(out, node->children[2]);
-        out << ";" << std::endl;
+        generate_declaration(out, node);
     }
     if (node->type == NodeType::ASSIGNMENT_STATEMENT)
     {
@@ -214,12 +219,15 @@ void generate_block(std::ofstream &out, Node *node)
 }
 
 void generate_function(std::ofstream &out, Node *node)
-{    
+{
     auto func_name = node->children[1]->value;
 
-    if (func_name == "main") {
+    if (func_name == "main")
+    {
         out << "int32_t";
-    } else {
+    }
+    else
+    {
         generate_type(out, node->children[0]);
     }
 
@@ -233,6 +241,11 @@ void generate_program(std::ofstream &out, Node *node)
     for (auto child : node->children)
     {
         generate_program(out, child);
+    }
+
+    if (node->type == NodeType::DECLARATION)
+    {
+        generate_declaration(out, node);
     }
 
     if (node->type == NodeType::FUNCTION)

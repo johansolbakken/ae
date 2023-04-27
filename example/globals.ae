@@ -1,0 +1,11 @@
+
+i32 a = 0;
+
+void set_a() {
+    a = 1;
+}
+
+void main() {
+    set_a();
+    println(a);
+}
