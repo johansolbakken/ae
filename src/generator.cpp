@@ -4,9 +4,9 @@
 #include <fstream>
 #include <iostream>
 
-std::string node_type_to_cpp(NodeType type)
+std::string node_type_to_cpp(Node* node)
 {
-    switch (type)
+    switch (node->type)
     {
     case NodeType::TYPE_VOID:
         return "void";
@@ -32,11 +32,13 @@ std::string node_type_to_cpp(NodeType type)
         return "float";
     case NodeType::TYPE_F64:
         return "double";
+    case NodeType::TYPE_POINTER:
+        return node_type_to_cpp(node->children[0]) + "*";
     default:
         break;
     }
 
-    std::cout << node_type_to_string(type) << std::endl;
+    std::cout << node_type_to_string(node->type) << std::endl;
 
     assert(false && "type overflow");
     return "";
@@ -48,7 +50,7 @@ void generate_type(std::ofstream &out, Node *node)
     {
         return generate_type(out, node->children[0]);
     }
-    out << node_type_to_cpp(node->type);
+    out << node_type_to_cpp(node);
 }
 
 void generate_condition(std::ofstream &out, Node *node);

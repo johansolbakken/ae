@@ -29,6 +29,7 @@ enum class NodeType
     TYPE_U64,
     TYPE_F32,
     TYPE_F64,
+    TYPE_POINTER,
     
     FUNCTION,
     DECLARATION,

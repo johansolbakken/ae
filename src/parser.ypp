@@ -79,6 +79,13 @@ type :
         node->line = yylineno;
         $$ = store_node(node);
     }
+    | type '*' {
+        auto node = make_node(NodeType::TYPE_POINTER, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
 
 basic_type :
     VOID {

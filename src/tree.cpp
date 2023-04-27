@@ -55,6 +55,8 @@ std::string node_basic_type_to_string(NodeType type)
         return "TYPE_F32";
     case NodeType::TYPE_F64:
         return "TYPE_F64";
+    case NodeType::TYPE_POINTER:
+        return "TYPE_POINTER";
     default:
         break;
     }
@@ -124,6 +126,7 @@ std::string node_type_to_string(NodeType type)
     case NodeType::TYPE_U64:
     case NodeType::TYPE_F32:
     case NodeType::TYPE_F64:
+    case NodeType::TYPE_POINTER:
         return node_basic_type_to_string(type);
 
     default:
@@ -266,6 +269,13 @@ Node *simplify_tree(Node *node)
         }
     }
 
+    if (node->type == NodeType::TYPE)
+    {
+        auto *child = node->children[0];
+        delete node;
+        return child;
+    }
+
     return node;
 }
 
@@ -305,25 +315,5 @@ void check_types(Node *node)
     {
         auto *child = node->children[i];
         check_types(child);
-    }
-
-    if (node->type == NodeType::DECLARATION)
-    {
-        if (is_integer_type(node->children[0]->type))
-        {
-            if (node->children[1]->type != NodeType::INT_DATA)
-            {
-                std::cout << "ERROR line " << node->line << ": Expected int data" << std::endl;
-                exit(1);
-            }
-        }
-        if (is_floating_type(node->children[0]->type))
-        {
-            if (node->children[1]->type != NodeType::FLOAT_DATA)
-            {
-                std::cout << "ERROR line " << node->line << ": Expected float data" << std::endl;
-                exit(1);
-            }
-        }
     }
 }
