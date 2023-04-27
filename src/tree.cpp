@@ -113,6 +113,12 @@ std::string node_type_to_string(NodeType type)
         return "POINTER";
     case NodeType::TYPE:
         return "TYPE";
+    case NodeType::PARAMETER_LIST:
+        return "PARAMETER_LIST";
+    case NodeType::EXPRESSION_LIST:
+        return "EXPRESSION_LIST";
+    case NodeType::PARAMETER:
+        return "PARAMETER";
 
     case NodeType::TYPE_VOID:
     case NodeType::TYPE_BOOL:
@@ -129,6 +135,8 @@ std::string node_type_to_string(NodeType type)
     case NodeType::TYPE_POINTER:
         return node_basic_type_to_string(type);
 
+        assert(false && "UNKOWN type in node_type_to_string");
+
     default:
         return "UNKNOWN";
     }
@@ -141,7 +149,7 @@ void print_node(Node *node, int indent)
         std::cout << "  ";
     }
     std::cout << node_type_to_string(node->type);
-    if (node->value != "")
+    if (node->value != "" && node->value != "\n")
         std::cout << " (" << node->value << ")";
     std::cout << std::endl;
     for (Node *child : node->children)
@@ -227,8 +235,49 @@ Node *simplify_tree(Node *node)
         }
     }
 
+    if (node->type == NodeType::PARAMETER_LIST)
+    {
+        if (node->children.size() == 1)
+        {
+            auto *child = node->children[0];
+            delete node;
+            return child;
+        }
+        if (node->children.size() > 0)
+        {
+            if (node->children[0]->type == NodeType::PARAMETER_LIST)
+            {
+                auto *child = node->children[0];
+                child->children.push_back(node->children[1]);
+                delete node;
+                return child;
+            }
+        }
+    }
+
+    if (node->type == NodeType::EXPRESSION_LIST)
+    {
+        if (node->children.size() == 1)
+        {
+            auto *child = node->children[0];
+            delete node;
+            return child;
+        }
+        if (node->children.size() > 0)
+        {
+            if (node->children[0]->type == NodeType::EXPRESSION_LIST)
+            {
+                auto *child = node->children[0];
+                child->children.push_back(node->children[1]);
+                delete node;
+                return child;
+            }
+        }
+    }
+
     if (node->type == NodeType::EXPRESSION)
     {
+        // todo: constant fold floats and ints and bools
         // Constant folding
         if (node->children.size() == 2 &&
             node->children[0]->type == NodeType::INT_DATA &&

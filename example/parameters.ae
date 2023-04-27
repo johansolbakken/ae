@@ -1,0 +1,8 @@
+
+i32 sum(i32 a, i32 b) {
+    return a + b;
+}
+
+void main() {
+    println(sum(1, 2));
+}

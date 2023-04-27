@@ -8,6 +8,8 @@
 
 Node *root = nullptr;
 
+constexpr auto panic = 0;
+
 int yyparse();
 extern FILE *yyin;
 
@@ -43,6 +45,12 @@ int main(int argc, char **argv)
         {
             source_files.push_back(argv[i]);
         }
+    }
+
+    if (panic) {
+        options.keep_cpp = true;
+        options.keep_out_ae = true;
+        options.parse_tree = true;
     }
 
     if (source_files.size() == 0)

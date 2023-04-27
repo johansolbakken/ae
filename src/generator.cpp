@@ -79,12 +79,20 @@ void generate_condition(std::ofstream &out, Node *node)
     generate_expression(out, node->children[1]);
 }
 
+void generate_expression_list(std::ofstream &out, Node *node);
+void generate_call(std::ofstream &out, Node *node)
+{
+    auto identifier = node->children[0]->value;
+    out << identifier << "(";
+    generate_expression_list(out, node->children[1]);
+    out << ")";
+}
+
 void generate_expression(std::ofstream &out, Node *node)
 {
     if (node->type == NodeType::CALL_STATEMENT)
     {
-        out << node->children[0]->value << "()";
-        return;
+        generate_call(out, node);
     }
     else if (node->children.size() == 1)
     {
@@ -122,6 +130,19 @@ void generate_declaration(std::ofstream &out, Node *node)
     out << " " << identifier << " = ";
     generate_expression(out, node->children[2]);
     out << ";" << std::endl;
+}
+
+void generate_expression_list(std::ofstream &out, Node *node)
+{
+    assert(node->type == NodeType::EXPRESSION_LIST);
+    for (int i = 0; i < node->children.size(); i++)
+    {
+        generate_expression(out, node->children[i]);
+        if (i != node->children.size() - 1)
+        {
+            out << ", ";
+        }
+    }
 }
 
 void generate_statement(std::ofstream &out, Node *node)
@@ -168,8 +189,8 @@ void generate_statement(std::ofstream &out, Node *node)
     }
     if (node->type == NodeType::CALL_STATEMENT)
     {
-        auto identifier = node->children[0]->value;
-        out << identifier << "();" << std::endl;
+        generate_call(out, node);
+        out << ";" << std::endl;
     }
     if (node->type == NodeType::IF_STATEMENT)
     {
@@ -218,6 +239,21 @@ void generate_block(std::ofstream &out, Node *node)
     out << "}" << std::endl;
 }
 
+void generate_parameter_list(std::ofstream &out, Node *node)
+{
+    assert(node->type == NodeType::PARAMETER_LIST);
+    for (int i = 0; i < node->children.size(); i++)
+    {
+        auto child = node->children[i];
+        generate_type(out, child->children[0]);
+        out << " " << child->children[1]->value;
+        if (i != node->children.size() - 1)
+        {
+            out << ", ";
+        }
+    }
+}
+
 void generate_function(std::ofstream &out, Node *node)
 {
     auto func_name = node->children[1]->value;
@@ -231,8 +267,10 @@ void generate_function(std::ofstream &out, Node *node)
         generate_type(out, node->children[0]);
     }
 
-    out << " " << func_name << "()" << std::endl;
-    auto block = node->children[2];
+    out << " " << func_name << "(";
+    generate_parameter_list(out, node->children[2]);
+    out << ")" << std::endl;
+    auto block = node->children[3];
     generate_block(out, block);
 }
 

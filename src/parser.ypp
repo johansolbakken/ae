@@ -68,11 +68,12 @@ global :
     };
 
 function :
-    type identifier '(' ')' '{' block '}' {
+    type identifier '(' parameter_list ')' '{' block '}' {
         auto node = make_node(NodeType::FUNCTION, {
             get_node($1),
             get_node($2),
-            get_node($6)
+            get_node($4),
+            get_node($7)
         }, "");
         node->line = yylineno;
         $$ = store_node(node);
@@ -292,9 +293,10 @@ assignment_statement :
     };
 
 call_statement : 
-    identifier '(' ')' {
+    identifier '(' expression_list ')' {
         auto node = make_node(NodeType::CALL_STATEMENT, {
-            get_node($1)
+            get_node($1),
+            get_node($3)
         }, "");
         node->line = yylineno;
         $$ = store_node(node);
@@ -328,6 +330,38 @@ while_statement:
         node->line = yylineno;
         $$ = store_node(node);
     }
+
+parameter_list:
+    {
+        auto node = make_node(NodeType::PARAMETER_LIST, {}, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | parameter {
+        auto node = make_node(NodeType::PARAMETER_LIST, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | parameter_list ',' parameter {
+        auto node = make_node(NodeType::PARAMETER_LIST, {
+            get_node($1),
+            get_node($3)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    };
+
+parameter:
+    type identifier {
+        auto node = make_node(NodeType::PARAMETER, {
+            get_node($1),
+            get_node($2)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    };
 
 condition : 
     expression '<' expression {
@@ -475,6 +509,28 @@ expression :
         node->line = yylineno;
         $$ = store_node(node);
     }
+
+expression_list :
+    {
+        auto node = make_node(NodeType::EXPRESSION_LIST, {}, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    } 
+    | expression {
+        auto node = make_node(NodeType::EXPRESSION_LIST, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | expression_list ',' expression {
+        auto node = make_node(NodeType::EXPRESSION_LIST, {
+            get_node($1),
+            get_node($3)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    };
 
 string_data : 
     STRING_LITERAL {
