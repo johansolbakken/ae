@@ -1,5 +1,5 @@
-int main() {
-    int a = 15;
+i32 main() {
+    i32 a = 15;
     println("Mitt magiske tall er");
     println(a);
     return 0;

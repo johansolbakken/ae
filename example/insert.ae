@@ -1,6 +1,6 @@
 #insert insertme
 
-int main() {
+i32 main() {
     println(a());
     return 0;
 }

@@ -52,8 +52,6 @@ std::string node_type_to_string(NodeType type)
         return "INT_DATA";
     case NodeType::STRING_DATA:
         return "STRING_DATA";
-    case NodeType::TYPE_INT:
-        return "TYPE_INT";
     case NodeType::FUNCTION:
         return "FUNCTION";
     case NodeType::DECLARATION:
@@ -72,8 +70,6 @@ std::string node_type_to_string(NodeType type)
         return "CONDITION";
     case NodeType::WHILE_STATEMENT:
         return "WHILE_STATEMENT";
-    case NodeType::TYPE_FLOAT:
-        return "TYPE_FLOAT";
     case NodeType::FLOAT_DATA:
         return "FLOAT_DATA";
     case NodeType::POINTER:
@@ -221,6 +217,36 @@ Node *simplify_tree(Node *node)
     return node;
 }
 
+bool is_integer_type(NodeType type)
+{
+    switch (type)
+    {
+    case NodeType::TYPE_I8:
+    case NodeType::TYPE_I16:
+    case NodeType::TYPE_I32:
+    case NodeType::TYPE_I64:
+    case NodeType::TYPE_U8:
+    case NodeType::TYPE_U16:
+    case NodeType::TYPE_U32:
+    case NodeType::TYPE_U64:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool is_floating_type(NodeType type)
+{
+    switch (type)
+    {
+    case NodeType::TYPE_F32:
+    case NodeType::TYPE_F64:
+        return true;
+    default:
+        return false;
+    }
+}
+
 void check_types(Node *node)
 {
     for (int i = 0; i < node->children.size(); i++)
@@ -231,7 +257,7 @@ void check_types(Node *node)
 
     if (node->type == NodeType::DECLARATION)
     {
-        if (node->children[0]->type == NodeType::TYPE_INT)
+        if (is_integer_type(node->children[0]->type))
         {
             if (node->children[1]->type != NodeType::INT_DATA)
             {
@@ -239,7 +265,7 @@ void check_types(Node *node)
                 exit(1);
             }
         }
-        if (node->children[0]->type == NodeType::TYPE_FLOAT)
+        if (is_floating_type(node->children[0]->type))
         {
             if (node->children[1]->type != NodeType::FLOAT_DATA)
             {

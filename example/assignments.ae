@@ -1,9 +1,9 @@
 
-int main() {
-    int a = 5;
+i32 main() {
+    i32 a = 5;
     println(a);
     a = 3;
-    int b = a + 4;
+    i32 b = a + 4;
     println(a);
     println(b);
 }

@@ -3,7 +3,7 @@ void hello() {
     println("Hello, world!");
 }
 
-int main() {
+i32 main() {
     hello();
     return 0;
 }

@@ -1,7 +1,7 @@
 
-int main() {
-    int stack = 0;
-    int* sp = &stack;
+i32 main() {
+    i32 stack = 0;
+    i32* sp = &stack;
     println(*sp);
     *sp = 5;
     println(*sp);

@@ -1,5 +1,5 @@
 
-int main() {
+i32 main() {
     println("Hello, World!");
     return 0;
 }

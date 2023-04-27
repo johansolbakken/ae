@@ -8,7 +8,8 @@
     extern int yylineno;
 %}
 
-%token IDENTIFIER INT VOID IF ELSE WHILE FLOAT
+%token IDENTIFIER IF ELSE WHILE
+%token VOID BOOL I8 I16 I32 I64 U8 U16 U32 U64 F32 F64
 %token INT_LITERAL STRING_LITERAL FLOAT_LITERAL
 %token PRINTLN RETURN PRINT
 
@@ -71,28 +72,98 @@ function :
     };
 
 type :
-    INT {
-        auto node = make_node(NodeType::TYPE_INT, {}, "");
+    basic_type {
+        auto node = make_node(NodeType::TYPE, {}, "");
         node->line = yylineno;
         $$ = store_node(node);
     }
-    | VOID {
-        auto node = make_node(NodeType::TYPE_VOID, {}, "");
-        node->line = yylineno;
-        $$ = store_node(node);
-    }
-    | FLOAT {
-        auto node = make_node(NodeType::TYPE_FLOAT, {}, "");
-        node->line = yylineno;
-        $$ = store_node(node);
-    }
-    | type '*' {
-        auto node = make_node(NodeType::POINTER, {
+
+basic_type :
+    VOID {
+        auto node = make_node(NodeType::BASIC_TYPE, {
             get_node($1)
         }, "");
         node->line = yylineno;
         $$ = store_node(node);
-    };
+    }
+    | BOOL {
+        auto node = make_node(NodeType::BASIC_TYPE, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | I8 {
+        auto node = make_node(NodeType::BASIC_TYPE, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | I16 {
+        auto node = make_node(NodeType::BASIC_TYPE, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | I32 {
+        auto node = make_node(NodeType::BASIC_TYPE, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | I64 {
+        auto node = make_node(NodeType::BASIC_TYPE, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | U8 {
+        auto node = make_node(NodeType::BASIC_TYPE, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | U16 {
+        auto node = make_node(NodeType::BASIC_TYPE, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | U32 {
+        auto node = make_node(NodeType::BASIC_TYPE, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | U64 {
+        auto node = make_node(NodeType::BASIC_TYPE, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | F32 {
+        auto node = make_node(NodeType::BASIC_TYPE, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | F64 {
+        auto node = make_node(NodeType::BASIC_TYPE, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+
 
 block : 
     statement_list {

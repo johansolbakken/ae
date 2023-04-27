@@ -1,12 +1,12 @@
 
-int main() {
-    int i = 0;
-    int a = 0;
-    int b = 1;
+i32 main() {
+    i32 i = 0;
+    i32 a = 0;
+    i32 b = 1;
     println(a);
     println(b);
     while (i < 10) {
-        int c = a + b;
+        i32 c = a + b;
         println(c);
         a = b;
         b = c;

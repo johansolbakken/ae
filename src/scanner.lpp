@@ -20,11 +20,21 @@ COMMENT \/\/[^\n]+
 {COMMENT}               { }
 {QUOTED}                { return STRING_LITERAL; }
 
-int                     { return INT; }
+void                    { return VOID; }
+bool                    { return BOOL; }
+i8                      { return I8;  }
+i16                     { return I16; }
+i32                     { return I32; }
+i64                     { return I64; }
+u8                      { return U8;  }
+u16                     { return U16; }
+u32                     { return U32; }
+u64                     { return U64; }
+f32                     { return F32; }
+f64                     { return F64; }
+
 println                 { return PRINTLN; }
 return                  { return RETURN; }
-void                    { return VOID; }
-float                   { return FLOAT; }
 if                      { return IF; }
 else                    { return ELSE; }
 while                   { return WHILE; }

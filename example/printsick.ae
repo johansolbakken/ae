@@ -1,5 +1,5 @@
 
-int main() {
+i32 main() {
     print("Hello, ");
     print("World!");
     print("\n");
