@@ -73,5 +73,4 @@ Ferdig da.
 * Target JavaScript?
 * Type Expressions
     * Type constructors (dragon page 371)
-* void main() { }
 * auto for deducing types
