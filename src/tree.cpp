@@ -220,3 +220,32 @@ Node *simplify_tree(Node *node)
 
     return node;
 }
+
+void check_types(Node *node)
+{
+    for (int i = 0; i < node->children.size(); i++)
+    {
+        auto *child = node->children[i];
+        check_types(child);
+    }
+
+    if (node->type == NodeType::DECLARATION)
+    {
+        if (node->children[0]->type == NodeType::TYPE_INT)
+        {
+            if (node->children[1]->type != NodeType::INT_DATA)
+            {
+                std::cout << "ERROR line " << node->line << ": Expected int data" << std::endl;
+                exit(1);
+            }
+        }
+        if (node->children[0]->type == NodeType::TYPE_FLOAT)
+        {
+            if (node->children[1]->type != NodeType::FLOAT_DATA)
+            {
+                std::cout << "ERROR line " << node->line << ": Expected float data" << std::endl;
+                exit(1);
+            }
+        }
+    }
+}

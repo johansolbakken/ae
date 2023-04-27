@@ -29,6 +29,7 @@ program :
         auto node = make_node(NodeType::PROGRAM, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         root = node;
     };
 
@@ -38,12 +39,14 @@ global_list :
             get_node($1),
             get_node($2)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | global {
         auto node = make_node(NodeType::GLOBAL_LIST, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -52,6 +55,7 @@ global :
         auto node = make_node(NodeType::GLOBAL, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -62,26 +66,31 @@ function :
             get_node($2),
             get_node($6)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
 type :
     INT {
         auto node = make_node(NodeType::TYPE_INT, {}, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | VOID {
         auto node = make_node(NodeType::TYPE_VOID, {}, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | FLOAT {
         auto node = make_node(NodeType::TYPE_FLOAT, {}, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | type '*' {
         auto node = make_node(NodeType::POINTER, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -90,6 +99,7 @@ block :
         auto node = make_node(NodeType::BLOCK, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -99,12 +109,14 @@ statement_list :
             get_node($1),
             get_node($2)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | statement {
         auto node = make_node(NodeType::STATEMENT_LIST, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -114,42 +126,49 @@ statement :
         auto node = make_node(NodeType::STATEMENT, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | return_statement ';' {
         auto node = make_node(NodeType::STATEMENT, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | declaration ';' {
         auto node = make_node(NodeType::STATEMENT, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | assignment_statement ';' {
          auto node = make_node(NodeType::STATEMENT, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | call_statement ';' {
         auto node = make_node(NodeType::STATEMENT, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | if_statement {
         auto node = make_node(NodeType::STATEMENT, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     } 
     | while_statement {
         auto node = make_node(NodeType::STATEMENT, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -159,12 +178,14 @@ print_statement :
         auto node = make_node(NodeType::PRINT_STATEMENT, {
             get_node($3)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | PRINTLN '(' expression ')' {
         auto node = make_node(NodeType::PRINT_STATEMENT, {
             get_node($3)
         }, "\n");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -174,6 +195,7 @@ return_statement :
         auto node = make_node(NodeType::RETURN_STATEMENT, {
             get_node($2)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -184,6 +206,7 @@ declaration :
             get_node($2),
             get_node($4)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -193,6 +216,7 @@ assignment_statement :
             get_node($1),
             get_node($3)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | '*' expression '=' expression {
@@ -200,6 +224,7 @@ assignment_statement :
             get_node($2),
             get_node($4)
         }, "*");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -208,6 +233,7 @@ call_statement :
         auto node = make_node(NodeType::CALL_STATEMENT, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -218,6 +244,7 @@ if_statement :
             get_node($6),
             get_node($10)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | IF '(' condition ')' '{' statement_list '}' {
@@ -225,6 +252,7 @@ if_statement :
             get_node($3),
             get_node($6)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -234,6 +262,7 @@ while_statement:
             get_node($3),
             get_node($6)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
 
@@ -243,6 +272,7 @@ condition :
             get_node($1),
             get_node($3)
         }, "<");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | expression '>' expression {
@@ -250,6 +280,7 @@ condition :
             get_node($1),
             get_node($3)
         }, ">");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | expression '=''=' expression {
@@ -257,6 +288,7 @@ condition :
             get_node($1),
             get_node($4)
         }, "==");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | expression '!''=' expression {
@@ -264,6 +296,7 @@ condition :
             get_node($1),
             get_node($4)
         }, "!=");
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -275,6 +308,7 @@ expression :
             get_node($3)
         }, 
         "+");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | expression '-' expression {
@@ -284,6 +318,7 @@ expression :
             get_node($3)
         }, 
         "-");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | expression '/' expression {
@@ -293,6 +328,7 @@ expression :
             get_node($3)
         }, 
         "/");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | expression '*' expression {
@@ -302,6 +338,7 @@ expression :
             get_node($3)
         }, 
         "*");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | '-' expression {
@@ -310,6 +347,7 @@ expression :
             get_node($2)
         }, 
         "-");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | '*' expression {
@@ -318,6 +356,7 @@ expression :
             get_node($2)
         }, 
         "*");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | '&' expression {
@@ -326,6 +365,7 @@ expression :
             get_node($2)
         }, 
         "&");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | '(' expression ')'{
@@ -334,42 +374,49 @@ expression :
             get_node($2)
         }, 
         "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | call_statement {
         auto node = make_node(NodeType::EXPRESSION, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | string_data {
         auto node = make_node(NodeType::EXPRESSION, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | int_data {
         auto node = make_node(NodeType::EXPRESSION, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     } 
     | float_data {
         auto node = make_node(NodeType::EXPRESSION, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
     | identifier {
         auto node = make_node(NodeType::EXPRESSION, {
             get_node($1)
         }, "");
+        node->line = yylineno;
         $$ = store_node(node);
     }
 
 string_data : 
     STRING_LITERAL {
         auto node = make_node(NodeType::STRING_DATA, {}, std::string(yytext));
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
@@ -377,18 +424,21 @@ string_data :
 int_data : 
     INT_LITERAL {
         auto node = make_node(NodeType::INT_DATA, {}, std::string(yytext));
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
 float_data :
     FLOAT_LITERAL {
         auto node = make_node(NodeType::FLOAT_DATA, {}, std::string(yytext));
+        node->line = yylineno;
         $$ = store_node(node);
     };
 
 identifier :
     IDENTIFIER {
         auto node = make_node(NodeType::IDENTIFIER_DATA, {}, std::string(yytext));
+        node->line = yylineno;
         $$ = store_node(node);
     }
 

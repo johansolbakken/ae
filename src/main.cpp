@@ -13,8 +13,8 @@ extern FILE *yyin;
 
 struct Options
 {
-    bool parse_tree = true;
-    bool keep_cpp = true;
+    bool parse_tree = false;
+    bool keep_cpp = false;
     bool keep_out_ae = false;
     std::string output_file = "a.out";
 };
@@ -73,6 +73,9 @@ int main(int argc, char **argv)
     root = simplify_tree(root);
     if (options.parse_tree)
         print_node(root);
+
+    // Analysis
+    check_types(root);
 
     // Generate code
     generate_code(root, "out.cpp");
