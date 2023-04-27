@@ -1,0 +1,22 @@
+
+u64[1024*1024] stdlib_heap = {};
+bool[1024*1024] stdlib_heap_used = {};
+
+u64* heap_new(u64 size) {
+    u64 cursor = 1;
+    while (cursor < 1024 * 1024) {
+        if (stdlib_heap_used[cursor] == 0) {
+            stdlib_heap_used[cursor] = 1;
+            return stdlib_heap + cursor;
+        }
+        cursor = cursor + 1;
+    }
+    
+    return 0;
+    
+}
+
+void heap_delete(u64* ptr) {
+    u64 cursor = ptr - stdlib_heap;
+    stdlib_heap_used[cursor] = 0;
+}

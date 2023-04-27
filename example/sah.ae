@@ -1,0 +1,15 @@
+
+u64[1024*1024] stdlib_heap = {};
+u64 cursor = 0;
+
+u64* heap_new(u64 size) {
+    u64* ptr = stdlib_heap + cursor;
+    cursor = cursor + 1;
+    return ptr;
+}
+
+void main() {
+    u64* a = heap_new(1);
+    *a = 1;
+    println(stdlib_heap[0]);
+}

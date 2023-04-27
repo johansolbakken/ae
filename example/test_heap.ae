@@ -1,0 +1,11 @@
+#insert ../stdlib/heap
+
+void main() {
+    u64* a = heap_new(1);
+    u64* b = heap_new(1);
+    println(a);
+    println(b);
+    heap_delete(a);
+    u64* c = heap_new(1);
+    println(c);
+}

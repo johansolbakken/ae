@@ -162,6 +162,11 @@ void generate_array_indexing(std::ofstream &out, Node *node)
 
 void generate_expression_list(std::ofstream &out, Node *node)
 {
+    if (node->type == NodeType::EXPRESSION)
+    {
+        generate_expression(out, node);
+        return;
+    }
     assert(node->type == NodeType::EXPRESSION_LIST);
     for (int i = 0; i < node->children.size(); i++)
     {
@@ -277,7 +282,13 @@ void generate_block(std::ofstream &out, Node *node)
 
 void generate_parameter_list(std::ofstream &out, Node *node)
 {
-    assert(node->type == NodeType::PARAMETER_LIST);
+    assert(node->type == NodeType::PARAMETER_LIST || node->type == NodeType::PARAMETER);
+    if (node->type == NodeType::PARAMETER)
+    {
+        generate_type(out, node->children[0]);
+        out << " " << node->children[1]->value;
+        return;
+    }
     for (int i = 0; i < node->children.size(); i++)
     {
         auto child = node->children[i];
@@ -312,9 +323,12 @@ void generate_function(std::ofstream &out, Node *node)
 
 void generate_program(std::ofstream &out, Node *node)
 {
-    for (auto child : node->children)
+    if (node->type == NodeType::GLOBAL_LIST)
     {
-        generate_program(out, child);
+        for (auto child : node->children)
+        {
+            generate_program(out, child);
+        }
     }
 
     if (node->type == NodeType::VARIABLE_DECLARATION)
