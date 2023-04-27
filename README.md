@@ -69,3 +69,4 @@ Ferdig da.
 * structs
 * scopes
 * enum
+* Target JavaScript?
