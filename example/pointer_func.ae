@@ -1,0 +1,10 @@
+
+void set(i32* x, i32 y) {
+    *x = y;
+}
+
+void main() {
+    i32 x = 0;
+    set(&x, 1);
+    println(x);
+}

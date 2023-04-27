@@ -4,7 +4,7 @@ YFLAGS=
 CPPFLAGS=-std=c++20 -g -Iinclude -Isrc
 
 objects=src/parser.o src/scanner.o src/main.o src/tree.o src/generator.o src/preprocess.o src/utils.o src/symbol.o
-examples=assignments constants fib floats function hello_world if insert more_print pointer printsick return variables while globals parameters
+examples=assignments constants fib floats function hello_world if insert more_print pointer printsick return variables while globals parameters pointer_func
 
 # Aec
 all: aec
