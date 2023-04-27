@@ -52,3 +52,20 @@ Ferdig da.
 - While statement: `while`
 - void function: `void a() { println("Hello"); }`
 - int/float function: `int g() { return 0; }`
+
+## Todo list
+* Static checking
+    * Check that when we encounter a break, that it is inside a while-loop.
+    * Strong type checking
+* Lists
+* Heap
+    * new and delete keywords
+* VS-Code syntax highlight
+* export and import
+    * only symbols marked as export will be visible when import
+* namespaces
+* casting
+* strings as data type
+* structs
+* scopes
+* enum
