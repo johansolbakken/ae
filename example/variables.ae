@@ -1,6 +1,5 @@
-i32 main() {
+void main() {
     i32 a = 15;
     println("Mitt magiske tall er");
     println(a);
-    return 0;
 }

@@ -214,10 +214,14 @@ void generate_block(std::ofstream &out, Node *node)
 }
 
 void generate_function(std::ofstream &out, Node *node)
-{
-    generate_type(out, node->children[0]);
-
+{    
     auto func_name = node->children[1]->value;
+
+    if (func_name == "main") {
+        out << "int32_t";
+    } else {
+        generate_type(out, node->children[0]);
+    }
 
     out << " " << func_name << "()" << std::endl;
     auto block = node->children[2];

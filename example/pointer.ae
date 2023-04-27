@@ -1,9 +1,8 @@
 
-i32 main() {
+void main() {
     i32 stack = 0;
     i32* sp = &stack;
     println(*sp);
     *sp = 5;
     println(*sp);
-    return 0;
 }

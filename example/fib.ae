@@ -1,5 +1,5 @@
 
-i32 main() {
+void main() {
     i32 i = 0;
     i32 a = 0;
     i32 b = 1;

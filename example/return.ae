@@ -3,8 +3,7 @@ i32 a() {
     return 5;
 }
 
-i32 main() {
+void main() {
     i32 x = a();
     println(x);
-    return 0;
 }

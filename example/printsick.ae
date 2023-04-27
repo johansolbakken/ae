@@ -1,8 +1,7 @@
 
-i32 main() {
+void main() {
     print("Hello, ");
     print("World!");
     print("\n");
     println("Johan er kul!");
-    return 0;   
 }
