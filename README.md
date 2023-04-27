@@ -75,3 +75,4 @@ Ferdig da.
 * Type Expressions
     * Type constructors (dragon page 371)
 * auto for deducing types
+* const !!!
