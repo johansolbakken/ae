@@ -57,12 +57,6 @@ Ferdig da.
 * Static checking
     * Check that when we encounter a break, that it is inside a while-loop.
     * Strong type checking
-* builtin data types
-    * i8, i16, i32, i64
-    * u8, u16, u32, u64
-    * f32, f64
-    * bool
-    * void
 * Lists
 * Heap
     * new and delete keywords
