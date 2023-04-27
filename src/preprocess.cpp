@@ -1,5 +1,7 @@
 #include "preprocess.hpp"
 
+#include "utils.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -23,7 +25,7 @@ void preprocess(const std::string &filename, const std::string &output_filename)
         if (line.find("#insert") == 0)
         {
             std::string insert_filename = path + "/" + line.substr(8) + ".ae";
-            if (std::find(included_files.begin(), included_files.end(), insert_filename) != included_files.end())
+            if (contains_string(included_files, insert_filename))
             {
                 continue;
             }
