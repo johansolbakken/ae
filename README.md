@@ -58,6 +58,7 @@ Ferdig da.
     * Check that when we encounter a break, that it is inside a while-loop.
     * Strong type checking
     * bool must end up as a bool. Define everything but 0 as true
+    * check parameters types
 * Lists
 * Heap
     * new and delete keywords
