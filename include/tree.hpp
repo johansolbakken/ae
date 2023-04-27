@@ -26,3 +26,5 @@ Node *simplify_tree(Node *node);
 Node *flatten_globals(Node *node);
 
 void check_types(Node *node);
+
+std::string node_type_to_string(NodeType type);

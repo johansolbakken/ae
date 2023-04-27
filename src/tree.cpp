@@ -1,4 +1,5 @@
 #include "tree.hpp"
+#include "aec.hpp"
 
 #include <unordered_map>
 #include <iostream>
@@ -24,6 +25,42 @@ int store_node(Node *node)
 Node *get_node(int index)
 {
     return nodes[index];
+}
+
+std::string node_basic_type_to_string(NodeType type)
+{
+    switch (type)
+    {
+    case NodeType::TYPE_VOID:
+        return "TYPE_VOID";
+    case NodeType::TYPE_BOOL:
+        return "TYPE_BOOL";
+    case NodeType::TYPE_I8:
+        return "TYPE_I8";
+    case NodeType::TYPE_I16:
+        return "TYPE_I16";
+    case NodeType::TYPE_I32:
+        return "TYPE_I32";
+    case NodeType::TYPE_I64:
+        return "TYPE_I64";
+    case NodeType::TYPE_U8:
+        return "TYPE_U8";
+    case NodeType::TYPE_U16:
+        return "TYPE_U16";
+    case NodeType::TYPE_U32:
+        return "TYPE_U32";
+    case NodeType::TYPE_U64:
+        return "TYPE_U64";
+    case NodeType::TYPE_F32:
+        return "TYPE_F32";
+    case NodeType::TYPE_F64:
+        return "TYPE_F64";
+    default:
+        break;
+    }
+
+    assert(false && "type overflow");
+    return "";
 }
 
 std::string node_type_to_string(NodeType type)
@@ -60,8 +97,6 @@ std::string node_type_to_string(NodeType type)
         return "EXPRESSION";
     case NodeType::ASSIGNMENT_STATEMENT:
         return "ASSIGNMENT_STATEMENT";
-    case NodeType::TYPE_VOID:
-        return "TYPE_VOID";
     case NodeType::CALL_STATEMENT:
         return "CALL_STATEMENT";
     case NodeType::IF_STATEMENT:
@@ -74,6 +109,23 @@ std::string node_type_to_string(NodeType type)
         return "FLOAT_DATA";
     case NodeType::POINTER:
         return "POINTER";
+    case NodeType::TYPE:
+        return "TYPE";
+
+    case NodeType::TYPE_VOID:
+    case NodeType::TYPE_BOOL:
+    case NodeType::TYPE_I8:
+    case NodeType::TYPE_I16:
+    case NodeType::TYPE_I32:
+    case NodeType::TYPE_I64:
+    case NodeType::TYPE_U8:
+    case NodeType::TYPE_U16:
+    case NodeType::TYPE_U32:
+    case NodeType::TYPE_U64:
+    case NodeType::TYPE_F32:
+    case NodeType::TYPE_F64:
+        return node_basic_type_to_string(type);
+
     default:
         return "UNKNOWN";
     }

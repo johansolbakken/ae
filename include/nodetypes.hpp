@@ -17,7 +17,6 @@ enum class NodeType
     FLOAT_DATA,
 
     TYPE,
-    BASIC_TYPE,
     TYPE_VOID,
     TYPE_BOOL,
     TYPE_I8,

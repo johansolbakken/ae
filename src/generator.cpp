@@ -1,26 +1,54 @@
 #include "generator.hpp"
+#include "aec.hpp"
 
 #include <fstream>
+#include <iostream>
+
+std::string node_type_to_cpp(NodeType type)
+{
+    switch (type)
+    {
+    case NodeType::TYPE_VOID:
+        return "void";
+    case NodeType::TYPE_BOOL:
+        return "bool";
+    case NodeType::TYPE_I8:
+        return "int8_t";
+    case NodeType::TYPE_I16:
+        return "int16_t";
+    case NodeType::TYPE_I32:
+        return "int32_t";
+    case NodeType::TYPE_I64:
+        return "int64_t";
+    case NodeType::TYPE_U8:
+        return "uint8_t";
+    case NodeType::TYPE_U16:
+        return "uint16_t";
+    case NodeType::TYPE_U32:
+        return "uint32_t";
+    case NodeType::TYPE_U64:
+        return "uint64_t";
+    case NodeType::TYPE_F32:
+        return "float";
+    case NodeType::TYPE_F64:
+        return "double";
+    default:
+        break;
+    }
+
+    std::cout << node_type_to_string(type) << std::endl;
+
+    assert(false && "type overflow");
+    return "";
+}
 
 void generate_type(std::ofstream &out, Node *node)
 {
-    if (node->type == NodeType::TYPE_INT)
+    if (node->type == NodeType::TYPE)
     {
-        out << "int";
+        return generate_type(out, node->children[0]);
     }
-    else if (node->type == NodeType::TYPE_FLOAT)
-    {
-        out << "float";
-    }
-    else if (node->type == NodeType::TYPE_VOID)
-    {
-        out << "void";
-    }
-    else if (node->type == NodeType::POINTER)
-    {
-        generate_type(out, node->children[0]);
-        out << "*";
-    }
+    out << node_type_to_cpp(node->type);
 }
 
 void generate_condition(std::ofstream &out, Node *node);
@@ -212,6 +240,7 @@ void generate_code(Node *node, const std::string &filename)
     std::ofstream out(filename);
 
     out << "#include <iostream>" << std::endl;
+    out << "#include <cstdint>" << std::endl;
 
     generate_program(out, node);
 }
