@@ -70,3 +70,4 @@ Ferdig da.
 * scopes
 * enum
 * Target JavaScript?
+* Type construcotrs (dragon page 371)
