@@ -18,14 +18,14 @@ example/fib.ae
 
 ```c++
 
-int main() {
-    int i = 0;
-    int a = 0;
-    int b = 1;
+void main() {
+    i32 i = 0;
+    i32 a = 0;
+    i32 b = 1;
     println(a);
     println(b);
     while (i < 10) {
-        int c = a + b;
+        i32 c = a + b;
         println(c);
         a = b;
         b = c;
@@ -46,12 +46,12 @@ Ferdig da.
 ## What Æ lang supports
 
 - Print statements: `println(x)`,`print(x)`
-- Int declaration: `int a = 5;`
-- Float declaration: `float b = 5.0;`
+- Int declaration: `i32 a = 5;`
+- Float declaration: `f32 b = 5.0;`
 - If, If/else: `if` `else`
 - While statement: `while`
 - void function: `void a() { println("Hello"); }`
-- int/float function: `int g() { return 0; }`
+- int/float function: `i32 g() { return 0; }`
 
 ## Todo list
 * Static checking
