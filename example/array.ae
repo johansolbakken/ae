@@ -1,0 +1,12 @@
+
+i32[1024] arr2 = { };
+
+void main() {
+    i32[1024] arr = { };
+    arr[0] = 1;
+    arr2[0] = arr[0];
+    println(arr2[0]);
+
+    i32* p = arr;
+    println(*p);
+}

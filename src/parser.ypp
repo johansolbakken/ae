@@ -264,8 +264,24 @@ return_statement :
     };
 
 declaration : 
-    type identifier '=' expression {
+    variable_declaration {
         auto node = make_node(NodeType::DECLARATION, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | array_declaration {
+        auto node = make_node(NodeType::DECLARATION, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    };
+
+variable_declaration :
+    type identifier '=' expression {
+        auto node = make_node(NodeType::VARIABLE_DECLARATION, {
             get_node($1),
             get_node($2),
             get_node($4)
@@ -288,6 +304,14 @@ assignment_statement :
             get_node($2),
             get_node($4)
         }, "*");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | array_indexing '=' expression {
+        auto node = make_node(NodeType::ASSIGNMENT_STATEMENT, {
+            get_node($1),
+            get_node($3)
+        }, "");
         node->line = yylineno;
         $$ = store_node(node);
     };
@@ -509,6 +533,20 @@ expression :
         node->line = yylineno;
         $$ = store_node(node);
     }
+    | initializer {
+        auto node = make_node(NodeType::EXPRESSION, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
+    | array_indexing {
+        auto node = make_node(NodeType::EXPRESSION, {
+            get_node($1)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    };
 
 expression_list :
     {
@@ -531,6 +569,35 @@ expression_list :
         node->line = yylineno;
         $$ = store_node(node);
     };
+
+array_indexing :
+    identifier '[' expression ']' {
+        auto node = make_node(NodeType::ARRAY_INDEXING, {
+            get_node($1),
+            get_node($3)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    };
+
+array_declaration :
+    type '[' expression ']' identifier '=' expression {
+        auto node = make_node(NodeType::ARRAY_DECLARATION, {
+            get_node($1),
+            get_node($3),
+            get_node($5),
+            get_node($7)
+        }, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    };
+
+initializer :
+    '{''}' {
+        auto node = make_node(NodeType::INITIALIZER, {}, "");
+        node->line = yylineno;
+        $$ = store_node(node);
+    }
 
 string_data : 
     STRING_LITERAL {

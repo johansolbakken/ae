@@ -119,6 +119,14 @@ std::string node_type_to_string(NodeType type)
         return "EXPRESSION_LIST";
     case NodeType::PARAMETER:
         return "PARAMETER";
+    case NodeType::ARRAY_INDEXING:
+        return "ARRAY_INDEXING";
+    case NodeType::INITIALIZER:
+        return "INITIALIZER";
+    case NodeType::ARRAY_DECLARATION:
+        return "ARRAY_DECLARATION";
+    case NodeType::VARIABLE_DECLARATION:
+        return "VARIABLE_DECLARATION";
 
     case NodeType::TYPE_VOID:
     case NodeType::TYPE_BOOL:
@@ -273,6 +281,13 @@ Node *simplify_tree(Node *node)
                 return child;
             }
         }
+    }
+
+    if (node->type == NodeType::DECLARATION)
+    {
+        auto *child = node->children[0];
+        delete node;
+        return child;
     }
 
     if (node->type == NodeType::EXPRESSION)

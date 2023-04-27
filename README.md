@@ -59,7 +59,6 @@ Ferdig da.
     * Strong type checking
     * bool must end up as a bool. Define everything but 0 as true
     * check parameters types
-* Lists
 * Heap
     * new and delete keywords
 * VS-Code syntax highlight

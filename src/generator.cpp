@@ -88,11 +88,20 @@ void generate_call(std::ofstream &out, Node *node)
     out << ")";
 }
 
+void generate_array_indexing(std::ofstream &out, Node *node);
 void generate_expression(std::ofstream &out, Node *node)
 {
     if (node->type == NodeType::CALL_STATEMENT)
     {
         generate_call(out, node);
+    }
+    else if (node->type == NodeType::INITIALIZER)
+    {
+        out << "{}" << std::endl;
+    }
+    else if (node->type == NodeType::ARRAY_INDEXING)
+    {
+        generate_array_indexing(out, node);
     }
     else if (node->children.size() == 1)
     {
@@ -123,13 +132,32 @@ void generate_expression(std::ofstream &out, Node *node)
     }
 }
 
-void generate_declaration(std::ofstream &out, Node *node)
+void generate_variable_declaration(std::ofstream &out, Node *node)
 {
     generate_type(out, node->children[0]);
     auto identifier = node->children[1]->value;
     out << " " << identifier << " = ";
     generate_expression(out, node->children[2]);
     out << ";" << std::endl;
+}
+
+void generate_array_declaration(std::ofstream &out, Node *node)
+{
+    generate_type(out, node->children[0]);
+    auto identifier = node->children[2]->value;
+    out << " " << identifier << "[";
+    generate_expression(out, node->children[1]);
+    out << "] = ";
+    generate_expression(out, node->children[3]);
+    out << ";" << std::endl;
+}
+
+void generate_array_indexing(std::ofstream &out, Node *node)
+{
+    auto identifier = node->children[0]->value;
+    out << identifier << "[";
+    generate_expression(out, node->children[1]);
+    out << "]";
 }
 
 void generate_expression_list(std::ofstream &out, Node *node)
@@ -164,9 +192,13 @@ void generate_statement(std::ofstream &out, Node *node)
         generate_expression(out, node->children[0]);
         out << ";" << std::endl;
     }
-    if (node->type == NodeType::DECLARATION)
+    if (node->type == NodeType::VARIABLE_DECLARATION)
     {
-        generate_declaration(out, node);
+        generate_variable_declaration(out, node);
+    }
+    if (node->type == NodeType::ARRAY_DECLARATION)
+    {
+        generate_array_declaration(out, node);
     }
     if (node->type == NodeType::ASSIGNMENT_STATEMENT)
     {
@@ -175,6 +207,10 @@ void generate_statement(std::ofstream &out, Node *node)
             // Pointer set
             out << "*";
             generate_expression(out, node->children[0]);
+        }
+        else if (node->children[0]->type == NodeType::ARRAY_INDEXING)
+        {
+            generate_array_indexing(out, node->children[0]);
         }
         else
         {
@@ -281,9 +317,14 @@ void generate_program(std::ofstream &out, Node *node)
         generate_program(out, child);
     }
 
-    if (node->type == NodeType::DECLARATION)
+    if (node->type == NodeType::VARIABLE_DECLARATION)
     {
-        generate_declaration(out, node);
+        generate_variable_declaration(out, node);
+    }
+
+    if (node->type == NodeType::ARRAY_DECLARATION)
+    {
+        generate_array_declaration(out, node);
     }
 
     if (node->type == NodeType::FUNCTION)
