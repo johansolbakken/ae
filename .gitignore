@@ -1,5 +1,5 @@
 aec
-*/*.o
+**/*.o
 .vscode
 include/parser.hpp
 src/parser.cpp
