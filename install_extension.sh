@@ -1,0 +1,1 @@
+cp -r aelang ~/.vscode/extensions
