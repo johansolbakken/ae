@@ -5,6 +5,8 @@
 #include "tree.hpp"
 #include "generator.hpp"
 #include "preprocess.hpp"
+#include "arch/arch_cpp.hpp"
+#include "arch/arch_js.hpp"
 
 Node *root = nullptr;
 
@@ -19,6 +21,7 @@ struct Options
     bool keep_cpp = false;
     bool keep_out_ae = false;
     std::string output_file = "a.out";
+    bool javascript = false;
 };
 
 int main(int argc, char **argv)
@@ -41,13 +44,18 @@ int main(int argc, char **argv)
             options.output_file = argv[i + 1];
             i++;
         }
+        else if (std::string(argv[i]) == "--javascript")
+        {
+            options.javascript = true;
+        }
         else
         {
             source_files.push_back(argv[i]);
         }
     }
 
-    if (panic) {
+    if (panic)
+    {
         options.keep_cpp = true;
         options.keep_out_ae = true;
         options.parse_tree = true;
@@ -71,6 +79,11 @@ int main(int argc, char **argv)
             options.output_file = options.output_file.substr(0, last_dot);
     }
 
+    if (options.javascript)
+    {
+        options.output_file += ".js";
+    }
+
     preprocess(source_files[0], "out.ae");
 
     yyin = fopen("out.ae", "r");
@@ -86,8 +99,15 @@ int main(int argc, char **argv)
     check_types(root);
 
     // Generate code
-    generate_code(root, "out.cpp");
-    compile_code("out.cpp", options.output_file);
+    if (options.javascript)
+    {
+        generate_code(root, options.output_file, std::make_shared<ArchJs>());
+    }
+    else
+    {
+        generate_code(root, "out.cpp", std::make_shared<ArchCpp>());
+        compile_code("out.cpp", options.output_file);
+    }
     if (!options.keep_cpp)
         system("rm out.cpp");
     if (!options.keep_out_ae)
