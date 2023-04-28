@@ -28,3 +28,7 @@ Node *flatten_globals(Node *node);
 void check_types(Node *node);
 
 std::string node_type_to_string(NodeType type);
+
+bool is_integer_type(NodeType type);
+bool is_floating_type(NodeType type);
+bool is_boolean_type(NodeType type);

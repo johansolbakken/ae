@@ -373,6 +373,17 @@ bool is_floating_type(NodeType type)
     }
 }
 
+bool is_boolean_type(NodeType type)
+{
+    switch (type)
+    {
+    case NodeType::TYPE_BOOL:
+        return true;
+    default:
+        return false;
+    }
+}
+
 void check_types(Node *node)
 {
     for (int i = 0; i < node->children.size(); i++)
