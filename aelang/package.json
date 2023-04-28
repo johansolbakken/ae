@@ -1,0 +1,25 @@
+{
+  "name": "aelang",
+  "displayName": "Æ",
+  "description": "The Æ programming language",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.77.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "aelang",
+      "aliases": ["Æ", "aelang"],
+      "extensions": ["ae"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "aelang",
+      "scopeName": "source.ae",
+      "path": "./syntaxes/aelang.tmLanguage.json"
+    }]
+  }
+}
