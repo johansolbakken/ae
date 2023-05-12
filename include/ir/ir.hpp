@@ -3,12 +3,25 @@
 #include <string>
 #include <vector>
 
+#include "tree.hpp"
+
 struct Tac {
     std::string op;
     std::string arg1;
     std::string arg2;
     std::string result;
 };
+
+struct Ir {
+    std::vector<Tac> tacs;
+    std::vector<std::string> strings;
+    std::vector<std::string> globals;
+    std::vector<std::string> functions;
+    std::vector<std::string> externs;
+};
+
+Ir generateIr(Node *root);
+
 
 //  x = y op z
 //  x = op y

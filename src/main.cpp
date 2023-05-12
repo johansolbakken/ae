@@ -7,6 +7,7 @@
 #include "preprocess.hpp"
 #include "arch/arch_cpp.hpp"
 #include "arch/arch_js.hpp"
+#include "ir/ir.hpp"
 
 Node *root = nullptr;
 
@@ -103,6 +104,45 @@ int main(int argc, char **argv)
 
     // Analysis
     check_types(root);
+
+    // Low level ir
+    auto ir = generateIr(root);
+
+    // tacs
+    std::cout << "TACS:" << std::endl;
+    for (auto tac : ir.tacs)
+    {
+        std::cout << tac.op << " " << tac.arg1 << " " << tac.arg2 << " " << tac.result << std::endl;
+    }
+
+    // strings
+    std::cout << "STRINGS:" << std::endl;
+    for (auto str : ir.strings)
+    {
+        std::cout << str << std::endl;
+    }
+
+    // globals
+    std::cout << "GLOBALS:" << std::endl;
+    for (auto global : ir.globals)
+    {
+        std::cout << global << std::endl;
+    }
+
+    // functions
+    std::cout << "FUNCTIONS:" << std::endl;
+    for (auto function : ir.functions)
+    {
+        std::cout << function << std::endl;
+    }
+
+    // externs
+    std::cout << "EXTERNS:" << std::endl;
+    for (auto extern_ : ir.externs)
+    {
+        std::cout << extern_ << std::endl;
+    }
+
 
     // Generate code
     if (options.javascript)
