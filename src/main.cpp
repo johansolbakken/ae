@@ -22,12 +22,11 @@ struct Options
     bool keep_out_ae = false;
     std::string output_file = "a.out";
     bool javascript = false;
+    std::vector<std::string> source_files;
 };
 
-int main(int argc, char **argv)
+Options extractOptions(int argc, char **argv)
 {
-    std::vector<std::string> source_files;
-
     Options options;
     for (int i = 1; i < argc; i++)
     {
@@ -50,9 +49,16 @@ int main(int argc, char **argv)
         }
         else
         {
-            source_files.push_back(argv[i]);
+            options.source_files.push_back(argv[i]);
         }
     }
+
+    return options;
+}
+
+int main(int argc, char **argv)
+{
+    Options options = extractOptions(argc, argv);
 
     if (panic)
     {
@@ -61,7 +67,7 @@ int main(int argc, char **argv)
         options.parse_tree = true;
     }
 
-    if (source_files.size() == 0)
+    if (options.source_files.size() == 0)
     {
         std::cout << "No source files provided" << std::endl;
         return 1;
@@ -70,7 +76,7 @@ int main(int argc, char **argv)
     if (options.output_file == "a.out")
     {
         // set output file to source file name without extension and without path
-        options.output_file = source_files[0];
+        options.output_file = options.source_files[0];
         int last_slash = options.output_file.find_last_of('/');
         if (last_slash != std::string::npos)
             options.output_file = options.output_file.substr(last_slash + 1);
@@ -84,7 +90,7 @@ int main(int argc, char **argv)
         options.output_file += ".js";
     }
 
-    preprocess(source_files[0], "out.ae");
+    preprocess(options.source_files[0], "out.ae");
 
     yyin = fopen("out.ae", "r");
 
